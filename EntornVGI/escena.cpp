@@ -636,13 +636,8 @@ void tie(GLint shaderId, glm::mat4 MatriuVista, glm::mat4 MatriuTG, bool sw_mat[
 {	Motor(shaderId,MatriuVista,MatriuTG, sw_mat);
 	Alas(shaderId, MatriuVista, MatriuTG, sw_mat);
 	Canon(shaderId, MatriuVista, MatriuTG, sw_mat);
-// Activar transparència
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		Cuerpo(shaderId, MatriuVista, MatriuTG, sw_mat);
-		Cabina(shaderId, MatriuVista, MatriuTG, sw_mat);
-// Desactivar transparència
-	glDisable(GL_BLEND);
+	Cuerpo(shaderId, MatriuVista, MatriuTG, sw_mat);
+	Cabina(shaderId, MatriuVista, MatriuTG, sw_mat);
 };
 
 void Alas(GLint shaderId, glm::mat4 MatriuVista, glm::mat4 MatriuTG, bool sw_mat[5])
@@ -1132,6 +1127,10 @@ void Cuerpo(GLint shaderId, glm::mat4 MatriuVista, glm::mat4 MatriuTG, bool sw_m
 	glm::mat4 TransMatrix(1.0), ModelMatrix(1.0), NormalMatrix(1.0);
 	CColor col_object;
 
+// Activar transparència
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 //Sujeccion de las Alas
 
 //Lado2
@@ -1216,6 +1215,9 @@ void Cuerpo(GLint shaderId, glm::mat4 MatriuVista, glm::mat4 MatriuTG, bool sw_m
 	glUniformMatrix4fv(glGetUniformLocation(shaderId, "normalMatrix"), 1, GL_FALSE, &NormalMatrix[0][0]);
 	draw_TriEBO_Object(GLU_SPHERE); //gluSphere(10.0f, 80, 80);
 	//glPopMatrix();
+
+// Desactivar transparència
+	glDisable(GL_BLEND);
 }
 
 void Cabina(GLint shaderId, glm::mat4 MatriuVista, glm::mat4 MatriuTG, bool sw_mat[5])
@@ -1223,6 +1225,10 @@ void Cabina(GLint shaderId, glm::mat4 MatriuVista, glm::mat4 MatriuTG, bool sw_m
 // Matrius Transformació
 	glm::mat4 TransMatrix(1.0), ModelMatrix(1.0), NormalMatrix(1.0);
 	CColor col_object;
+
+// Activar transparència
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 // Tapa Cabina
 	//glPushMatrix();
@@ -1264,5 +1270,8 @@ void Cabina(GLint shaderId, glm::mat4 MatriuVista, glm::mat4 MatriuTG, bool sw_m
 	glUniformMatrix4fv(glGetUniformLocation(shaderId, "normalMatrix"), 1, GL_FALSE, &NormalMatrix[0][0]);
 	draw_TriEBO_Object(GLUT_USER5); //gluCylinder(1.5f, 4.5f, 2.0f, 8, 1);
 	//glPopMatrix();
+
+// Desactivar transparència
+	glDisable(GL_BLEND);
 }
 // FI OBJECTE TIE: FETS PER ALUMNES -----------------------------------------------------------------

@@ -17,7 +17,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// Español (España, alfabetización internacional) resources
+// Spanish (Spain, International Sort) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ESN)
 LANGUAGE LANG_SPANISH, SUBLANG_SPANISH_MODERN
@@ -333,8 +333,8 @@ BEGIN
     POPUP "Projecció"
     BEGIN
         MENUITEM "Perspectiva",                 ID_PROJECCIO_PERSPECTIVA, CHECKED
-        MENUITEM "Ortogràfica",                 ID_PROJECCIO_ORTOGRAFICA, CHECKED
-        MENUITEM "Axonomètrica",                ID_PROJECCIO_AXONOMETRICA, CHECKED
+        MENUITEM "Ortografica",                 ID_PROJECCIO_ORTOGRAFICA, CHECKED
+        MENUITEM "Axonometrica",                ID_PROJECCIO_AXONOMETRICA, CHECKED
     END
     POPUP "Objecte"
     BEGIN
@@ -794,7 +794,7 @@ BEGIN
     IDS_FIND_TAB            "Buscar"
 END
 
-#endif    // Español (España, alfabetización internacional) resources
+#endif    // Spanish (Spain, International Sort) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

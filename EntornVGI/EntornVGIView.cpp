@@ -1007,7 +1007,7 @@ void CEntornVGIView::OnPaint()
 				// Definició de Viewport, Projecció i Càmara
 		glScissor(w / 2, 0, w / 2, h / 2);
 		ProjectionMatrix = Projeccio_Orto(shader_programID, w / 2, 0, w / 2, h / 2);
-		ViewMatrix = Vista_Ortografica(shader_programID, 4, OPV.R, c_fons, col_obj, objecte, mida, pas,
+		ViewMatrix = Vista_Ortografica(shader_programID, 3, OPV.R, c_fons, col_obj, objecte, mida, pas,
 			front_faces, oculta, test_vis,
 			ilumina, llum_ambient, llumGL, ifixe, ilum2sides,
 			eixos, grid, hgrid);
@@ -6001,6 +6001,7 @@ void CEntornVGIView::OnProjeccioOrtografica()
 {
 	// TODO: Agregue aquí su código de controlador de comandos
 	projeccio = ORTO;
+	eixos = true;
 	mobil = false;
 	zzoom = false;
 	InvalidateRect(NULL, false);
@@ -6024,6 +6025,8 @@ void CEntornVGIView::OnProjeccioAxonometrica()
 	projeccio = AXONOM;
 	mobil = true;
 	zzoom = true;
+	eixos = true;
+	InvalidateRect(NULL, false);
 }
 
 void CEntornVGIView::OnUpdateProjeccioAxonometrica(CCmdUI* pCmdUI)

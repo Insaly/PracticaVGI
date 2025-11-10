@@ -346,7 +346,7 @@ glm::mat4 Projeccio_Orto(GLuint sh_programID, int x, int y, float w, float h)
 		top = escala / aspecte;
 	}
 
-	MatriuProjeccio = glm::ortho(float(left), float(right), float(top), float(bottom), float(vnear), float(vfar));
+	MatriuProjeccio = glm::ortho(float(left), float(right), float(bottom), float(top), float(vnear), float(vfar));
 	glViewport(x, y, w, h);
 	glUniformMatrix4fv(glGetUniformLocation(sh_programID, "projectionMatrix"), 1, GL_FALSE, &MatriuProjeccio[0][0]);
 	return MatriuProjeccio;
@@ -398,7 +398,7 @@ glm::mat4 Vista_Ortografica(GLuint sh_programID, int prj,GLdouble Raux,CColor co
 		MatriuVista = glm::lookAt(
 			glm::vec3(1, 1, 1), // Camera is here
 			glm::vec3(0, 0, 0), // and looks here
-			glm::vec3(0, -1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
+			glm::vec3(-1, 1, -1)  // Head is up (set to 0,-1,0 to look upside-down)
 		);
 	}
 	if (prj == 4)
