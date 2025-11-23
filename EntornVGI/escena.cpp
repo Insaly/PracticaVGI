@@ -122,6 +122,10 @@ void dibuixa_EscenaGL(GLuint sh_programID, bool eix, GLuint axis_Id, CMask3D rei
 
 	switch (objecte)
 	{
+		//Camio
+	case CAMIO:
+		camio(sh_programID, MatriuVista, MatriuTG, sw_mat);
+		break;
 
 // Arc
 	case ARC:
@@ -391,6 +395,8 @@ void dibuixa_EscenaGL(GLuint sh_programID, bool eix, GLuint axis_Id, CMask3D rei
 		draw_TriEBO_Object(GLU_SPHERE); //gluSphere(1.0, 20, 20);
 		break;
 
+
+
 // Dibuix de la resta d'objectes
 	default:
 		// Definició propietats de reflexió (emissió, ambient, difusa, especular) del material.
@@ -412,10 +418,10 @@ void dibuixa(GLuint sh_programID, char obj, glm::mat4 MatriuVista, glm::mat4 Mat
 	
 	tras[0] = 0.0;	tras[1] = 0.0; tras[2] = 0.0;
 
-	switch(obj)
+	switch (obj)
 	{
 
-// Cub
+		// Cub
 	case CUB:
 		ModelMatrix = glm::scale(MatriuTG, vec3(5.0f, 5.0f, 5.0f));
 		// Pas ModelView Matrix a shader
@@ -436,8 +442,8 @@ void dibuixa(GLuint sh_programID, char obj, glm::mat4 MatriuVista, glm::mat4 Mat
 		draw_TriEBO_Object(GLUT_CUBE_RGB);	//draw_TriVAO_Object(GLUT_CUBE_RGB); // glutSolidCubeRGB(1.0);
 		break;
 
-// Esfera
-	case ESFERA:	
+		// Esfera
+	case ESFERA:
 		ModelMatrix = glm::scale(MatriuTG, vec3(5.0f, 5.0f, 5.0f));
 		// Pas ModelView Matrix a shader
 		glUniformMatrix4fv(glGetUniformLocation(sh_programID, "modelMatrix"), 1, GL_FALSE, &ModelMatrix[0][0]);
@@ -447,7 +453,7 @@ void dibuixa(GLuint sh_programID, char obj, glm::mat4 MatriuVista, glm::mat4 Mat
 		draw_TriEBO_Object(GLU_SPHERE); //draw_TriVAO_Object(GLU_SPHERE); //gluSphere(1.0, 40, 40);
 		break;
 
-// Tetera
+		// Tetera
 	case TETERA:
 		ModelMatrix = MatriuTG;
 		// Pas ModelView Matrix a shader
@@ -458,6 +464,68 @@ void dibuixa(GLuint sh_programID, char obj, glm::mat4 MatriuVista, glm::mat4 Mat
 		draw_TriVAO_Object(GLUT_TEAPOT); // glutSolidTeapot(1.0);
 		break;
 	}
+}
+
+//OBJECTE CAMIO
+void camio(GLuint sh_programID, glm::mat4 MatriuVista, glm::mat4 MatriuTG, bool sw_mat[5])
+{
+	CColor col_object;
+	glm::mat4 NormalMatrix(1.0), ModelMatrix(1.0);
+
+	const float cabina_side = 1.0f;
+
+	const float remolque_length = 5.0f;
+	const float remolque_width = 2.0f;
+	const float remolque_height = 2.0f;
+
+	const float rueda_r_ext = 0.2f;
+	const float rueda_r_int = 0.1f;
+	const float rueda_separacion_y = 0.7f;
+	const float rueda_separacion_x = 2.0f;
+
+	float centrado_z = rueda_r_ext + remolque_height * 0.5f;
+
+	col_object = { 0.5, 0.5, 0.5, 1.0 };
+	SeleccionaColorMaterial(sh_programID, col_object, sw_mat);
+
+	ModelMatrix = glm::translate(MatriuTG, vec3(0.0f, 0.0f, 1.2f));
+	ModelMatrix = glm::scale(ModelMatrix, vec3(remolque_width, remolque_length, remolque_height));
+
+	glUniformMatrix4fv(glGetUniformLocation(sh_programID, "modelMatrix"), 1, GL_FALSE, &ModelMatrix[0][0]);
+	NormalMatrix = transpose(inverse(MatriuVista * ModelMatrix));
+	glUniformMatrix4fv(glGetUniformLocation(sh_programID, "normalMatrix"), 1, GL_FALSE, &NormalMatrix[0][0]);
+	draw_TriEBO_Object(GLUT_CUBE);
+
+
+	col_object = { 0.0, 0.7, 0.7, 1 };
+	SeleccionaColorMaterial(sh_programID, col_object, sw_mat);
+
+	ModelMatrix = glm::translate(MatriuTG, vec3(0.0f, 3.0f, 0.7f));
+
+	glUniformMatrix4fv(glGetUniformLocation(sh_programID, "modelMatrix"), 1, GL_FALSE, &ModelMatrix[0][0]);
+	NormalMatrix = transpose(inverse(MatriuVista * ModelMatrix));
+	glUniformMatrix4fv(glGetUniformLocation(sh_programID, "normalMatrix"), 1, GL_FALSE, &NormalMatrix[0][0]);
+	draw_TriEBO_Object(GLUT_CUBE);
+
+
+	col_object = { 0.7, 0.7, 0.7, 1};
+	SeleccionaColorMaterial(sh_programID, col_object, sw_mat);
+
+	auto rueda = [&](float x, float y)
+		{
+			ModelMatrix = glm::translate(MatriuTG, vec3(y, x, rueda_r_ext));
+			ModelMatrix = glm::rotate(ModelMatrix, radians(90.0f), vec3(0, 1, 0));
+
+			glUniformMatrix4fv(glGetUniformLocation(sh_programID, "modelMatrix"), 1, GL_FALSE, &ModelMatrix[0][0]);
+			NormalMatrix = transpose(inverse(MatriuVista * ModelMatrix));
+			glUniformMatrix4fv(glGetUniformLocation(sh_programID, "normalMatrix"), 1, GL_FALSE, &NormalMatrix[0][0]);
+			draw_TriEBO_Object(GLUT_TORUS);
+		};
+
+	rueda(rueda_separacion_x, rueda_separacion_y);
+	rueda(-rueda_separacion_x, rueda_separacion_y);
+	rueda(rueda_separacion_x, -rueda_separacion_y);
+	rueda(-rueda_separacion_x, -rueda_separacion_y);
 }
 
 // OBJECTE ARC
@@ -636,8 +704,13 @@ void tie(GLint shaderId, glm::mat4 MatriuVista, glm::mat4 MatriuTG, bool sw_mat[
 {	Motor(shaderId,MatriuVista,MatriuTG, sw_mat);
 	Alas(shaderId, MatriuVista, MatriuTG, sw_mat);
 	Canon(shaderId, MatriuVista, MatriuTG, sw_mat);
-	Cuerpo(shaderId, MatriuVista, MatriuTG, sw_mat);
-	Cabina(shaderId, MatriuVista, MatriuTG, sw_mat);
+// Activar transparència
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		Cuerpo(shaderId, MatriuVista, MatriuTG, sw_mat);
+		Cabina(shaderId, MatriuVista, MatriuTG, sw_mat);
+// Desactivar transparència
+	glDisable(GL_BLEND);
 };
 
 void Alas(GLint shaderId, glm::mat4 MatriuVista, glm::mat4 MatriuTG, bool sw_mat[5])
@@ -1127,10 +1200,6 @@ void Cuerpo(GLint shaderId, glm::mat4 MatriuVista, glm::mat4 MatriuTG, bool sw_m
 	glm::mat4 TransMatrix(1.0), ModelMatrix(1.0), NormalMatrix(1.0);
 	CColor col_object;
 
-// Activar transparència
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 //Sujeccion de las Alas
 
 //Lado2
@@ -1215,9 +1284,6 @@ void Cuerpo(GLint shaderId, glm::mat4 MatriuVista, glm::mat4 MatriuTG, bool sw_m
 	glUniformMatrix4fv(glGetUniformLocation(shaderId, "normalMatrix"), 1, GL_FALSE, &NormalMatrix[0][0]);
 	draw_TriEBO_Object(GLU_SPHERE); //gluSphere(10.0f, 80, 80);
 	//glPopMatrix();
-
-// Desactivar transparència
-	glDisable(GL_BLEND);
 }
 
 void Cabina(GLint shaderId, glm::mat4 MatriuVista, glm::mat4 MatriuTG, bool sw_mat[5])
@@ -1225,10 +1291,6 @@ void Cabina(GLint shaderId, glm::mat4 MatriuVista, glm::mat4 MatriuTG, bool sw_m
 // Matrius Transformació
 	glm::mat4 TransMatrix(1.0), ModelMatrix(1.0), NormalMatrix(1.0);
 	CColor col_object;
-
-// Activar transparència
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 // Tapa Cabina
 	//glPushMatrix();
@@ -1270,8 +1332,5 @@ void Cabina(GLint shaderId, glm::mat4 MatriuVista, glm::mat4 MatriuTG, bool sw_m
 	glUniformMatrix4fv(glGetUniformLocation(shaderId, "normalMatrix"), 1, GL_FALSE, &NormalMatrix[0][0]);
 	draw_TriEBO_Object(GLUT_USER5); //gluCylinder(1.5f, 4.5f, 2.0f, 8, 1);
 	//glPopMatrix();
-
-// Desactivar transparència
-	glDisable(GL_BLEND);
 }
 // FI OBJECTE TIE: FETS PER ALUMNES -----------------------------------------------------------------

@@ -1,1 +1,2 @@
-﻿LINK : fatal error LNK1104: cannot open file 'glew32s.lib'
+﻿  escena.cpp
+  EntornVGI.vcxproj -> C:\Users\janga\OneDrive\Escritorio\3r Informatica\VGI\PracticaVGI\x64\Release\EntornVGI.exe

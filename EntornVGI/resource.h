@@ -227,13 +227,14 @@
 #define ID_PROJECCIO_ORTOGRAFICA        32907
 #define ID_PROJECCI32908                32908
 #define ID_PROJECCIO_AXONOMETRICA       32909
+#define ID_OBJECTE_CAMIO                32910
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        311
-#define _APS_NEXT_COMMAND_VALUE         32910
+#define _APS_NEXT_COMMAND_VALUE         32911
 #define _APS_NEXT_CONTROL_VALUE         1000
 #define _APS_NEXT_SYMED_VALUE           310
 #endif

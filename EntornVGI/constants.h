@@ -60,6 +60,7 @@
 #define FILFERROS 'w'
 #define PLANA 'p'
 #define SUAU 's'
+#define CAMIO 'C'
 
 // -------------- VGI: Definició dels valors del pla near i far del Volum de Visualització en Perspectiva
 const double p_near=0.01;

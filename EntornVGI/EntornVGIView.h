@@ -448,6 +448,8 @@ public:
 	afx_msg void OnUpdateProjeccioOrtografica(CCmdUI* pCmdUI);
 	afx_msg void OnProjeccioAxonometrica();
 	afx_msg void OnUpdateProjeccioAxonometrica(CCmdUI* pCmdUI);
+	afx_msg void OnObjecteCamio();
+	afx_msg void OnUpdateObjecteCamio(CCmdUI* pCmdUI);
 };
 
 #ifndef _DEBUG  // Versión de depuración en EntornVGIView.cpp
