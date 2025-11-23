@@ -17,7 +17,7 @@ void Iluminacio(GLint sh_programID, char ilumin, bool ifix, bool ilu2sides, bool
 
 // ----------- Entorn VGI: PROJECCIONS
 // Entorn VGI: Projecció Ortografica
-glm::mat4 Projeccio_Orto(GLuint sh_programID, int x, int y, float w, float h);
+glm::mat4 Projeccio_Orto(GLuint sh_programID, int x, int y, float w, float h, float escala);
 // Entorn VGI: Projecció Perspectiva
 glm::mat4 Projeccio_Perspectiva(GLuint sh_programID, int minx, int miny, GLsizei w, GLsizei h, double zoom);
 

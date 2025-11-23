@@ -39,6 +39,9 @@
 #define new DEBUG_NEW
 #endif
 
+float escala = 5.0;
+float escalaPersp = 100.0;
+
 /////////////////////////////////////////////////////////////////////////////
 // CEntornVGIView
 
@@ -968,7 +971,7 @@ void CEntornVGIView::OnPaint()
 		glViewport(0, 0, w, h);
 
 		// Aquí farem les crides per a definir Viewport, Projecció i Càmara: INICI -------------------------
-		ProjectionMatrix = Projeccio_Orto(shader_programID, 0, 0, w, h);
+		ProjectionMatrix = Projeccio_Orto(shader_programID, 0, 0, w, h, escala);
 		ViewMatrix = Vista_Esferica(shader_programID, OPV, Vis_Polar, pan, tr_cpv, tr_cpvF, c_fons, col_obj, objecte, mida, pas,
 			front_faces, oculta, test_vis,
 			ilumina, llum_ambient, llumGL, ifixe, ilum2sides,
@@ -996,7 +999,7 @@ void CEntornVGIView::OnPaint()
 
 				// Definició de Viewport, Projecció i Càmara
 		glScissor(0, 0, w / 2, h / 2);
-		ProjectionMatrix = Projeccio_Orto(shader_programID, 0, 0, w / 2, h / 2);
+		ProjectionMatrix = Projeccio_Orto(shader_programID, 0, 0, w / 2, h / 2, escala);
 		ViewMatrix = Vista_Ortografica(shader_programID, 1, OPV.R, c_fons, col_obj, objecte, mida, pas,
 			front_faces, oculta, test_vis,
 			ilumina, llum_ambient, llumGL, ifixe, ilum2sides,
@@ -1008,7 +1011,7 @@ void CEntornVGIView::OnPaint()
 		// ISOMÈTRICA (Inferior Dreta)
 				// Definició de Viewport, Projecció i Càmara
 		glScissor(w / 2, 0, w / 2, h / 2);
-		ProjectionMatrix = Projeccio_Orto(shader_programID, w / 2, 0, w / 2, h / 2);
+		ProjectionMatrix = Projeccio_Orto(shader_programID, w / 2, 0, w / 2, h / 2, escala);
 		ViewMatrix = Vista_Ortografica(shader_programID, 3, OPV.R, c_fons, col_obj, objecte, mida, pas,
 			front_faces, oculta, test_vis,
 			ilumina, llum_ambient, llumGL, ifixe, ilum2sides,
@@ -1021,7 +1024,7 @@ void CEntornVGIView::OnPaint()
 		// ALÇAT (Superior Esquerra)
 				// Definició de Viewport, Projecció i Càmara
 		glScissor(0, h / 2, w / 2, h / 2);
-		ProjectionMatrix = Projeccio_Orto(shader_programID, 0, h / 2, w / 2, h / 2);
+		ProjectionMatrix = Projeccio_Orto(shader_programID, 0, h / 2, w / 2, h / 2, escala);
 		ViewMatrix = Vista_Ortografica(shader_programID, 0, OPV.R, c_fons, col_obj, objecte, mida, pas,
 			front_faces, oculta, test_vis,
 			ilumina, llum_ambient, llumGL, ifixe, ilum2sides,
@@ -1034,7 +1037,7 @@ void CEntornVGIView::OnPaint()
 
 				// Definició de Viewport, Projecció i Càmara
 		glScissor(w / 2, h / 2, w / 2, h / 2);
-		ProjectionMatrix = Projeccio_Orto(shader_programID, w / 2, h / 2, w / 2, h / 2);
+		ProjectionMatrix = Projeccio_Orto(shader_programID, w / 2, h / 2, w / 2, h / 2, escala);
 		ViewMatrix = Vista_Ortografica(shader_programID, 2, OPV.R, c_fons, col_obj, objecte, mida, pas,
 			front_faces, oculta, test_vis,
 			ilumina, llum_ambient, llumGL, ifixe, ilum2sides,
@@ -1055,6 +1058,9 @@ void CEntornVGIView::OnPaint()
 		glDisable(GL_SCISSOR_TEST);		// Desactivació del retall de pantalla
 
 		// Definició de Viewport, Projecció i Càmara
+
+		OPV.R = escalaPersp;
+
 		ProjectionMatrix = Projeccio_Perspectiva(shader_programID, 0, 0, w, h, OPV.R);
 
 		// Definició de la càmera.
@@ -4034,7 +4040,11 @@ void CEntornVGIView::OnObjecteCub()
 
 	//	---- Entorn VGI: ATENCIÓ!!. Canviar l'escala per a centrar la vista (Ortogràfica)
 
+	escala = 4.1;
+
 	//  ---- Entorn VGI: ATENCIÓ!!. Modificar R per centrar la Vista a la mida de l'objecte (Perspectiva)
+
+	escalaPersp = 8.6;
 
 	// Entorn VGI: Activació el contexte OpenGL
 	wglMakeCurrent(m_pDC->GetSafeHdc(), m_hRC);
@@ -4070,7 +4080,11 @@ void CEntornVGIView::OnObjecteCubRGB()
 
 	//	---- Entorn VGI: ATENCIÓ!!. Canviar l'escala per a centrar la vista (Ortogràfica)
 
+	escala = 4.1;
+
 	//  ---- Entorn VGI: ATENCIÓ!!. Modificar R per centrar la Vista a la mida de l'objecte (Perspectiva)
+
+	escalaPersp = 8.6;
 
 	// Entorn VGI: Activació el contexte OpenGL
 	wglMakeCurrent(m_pDC->GetSafeHdc(), m_hRC);
@@ -4104,7 +4118,11 @@ void CEntornVGIView::OnObjecteEsfera()
 
 	//	---- Entorn VGI: ATENCIÓ!!. Canviar l'escala per a centrar la vista (Ortogràfica)
 
+	escala = 5.0;
+
 	//  ---- Entorn VGI: ATENCIÓ!!. Modificar R per centrar la Vista a la mida de l'objecte (Perspectiva)
+
+	escalaPersp = 10.0;
 
 	// Entorn VGI: Activació el contexte OpenGL
 	wglMakeCurrent(m_pDC->GetSafeHdc(), m_hRC);
@@ -4139,7 +4157,11 @@ void CEntornVGIView::OnObjecteTetera()
 
 	//	---- Entorn VGI: ATENCIÓ!!. Canviar l'escala per a centrar la vista (Ortogràfica)
 
+	escala = 5.0;
+
 	//  ---- Entorn VGI: ATENCIÓ!!. Modificar R per centrar la Vista a la mida de l'objecte (Perspectiva)
+
+	escalaPersp = 12.0;
 
 	// Entorn VGI: Activació el contexte OpenGL
 	wglMakeCurrent(m_pDC->GetSafeHdc(), m_hRC);
@@ -4180,7 +4202,11 @@ void CEntornVGIView::OnObjecteArc()
 
 	//	---- Entorn VGI: ATENCIÓ!!. Canviar l'escala per a centrar la vista (Ortogràfica)
 
+	escala = 5.5;
+
 	//  ---- Entorn VGI: ATENCIÓ!!. Modificar R per centrar la Vista a la mida de l'objecte (Perspectiva)
+
+	escalaPersp = 17.5;
 
 	// Entorn VGI: Activació el contexte OpenGL
 	wglMakeCurrent(m_pDC->GetSafeHdc(), m_hRC);
@@ -4227,7 +4253,11 @@ void CEntornVGIView::OnObjecteTie()
 
 	//	---- Entorn VGI: ATENCIÓ!!. Canviar l'escala per a centrar la vista (Ortogràfica)
 
+	escala = 50.0;
+
 	//  ---- Entorn VGI: ATENCIÓ!!. Modificar R per centrar la Vista a la mida de l'objecte (Perspectiva)
+
+	escalaPersp = 110.0;
 
 	// Entorn VGI: Activació el contexte OpenGL
 	wglMakeCurrent(m_pDC->GetSafeHdc(), m_hRC);
@@ -4615,7 +4645,11 @@ void CEntornVGIView::OnObjecteMatriuPrimitives()
 
 	//	---- Entorn VGI: ATENCIÓ!!. Canviar l'escala per a centrar la vista (Ortogràfica)
 
+	escala = 200.0;
+
 	//  ---- Entorn VGI: ATENCIÓ!!. Modificar R per centrar la Vista a la mida de l'objecte (Perspectiva)
+
+	escalaPersp = 400.0;
 
 	// Crida a OnPaint() per redibuixar l'escena
 	InvalidateRect(NULL, false);
@@ -4637,7 +4671,11 @@ void CEntornVGIView::OnObjecteMatriuPrimitivesVBO()
 
 	//	---- Entorn VGI: ATENCIÓ!!. Canviar l'escala per a centrar la vista (Ortogràfica)
 
+	escala = 200.0;
+
 	//  ---- Entorn VGI: ATENCIÓ!!. Modificar R per centrar la Vista a la mida de l'objecte (Perspectiva)
+
+	escalaPersp = 400.0;
 
 	// Entorn VGI: Activació el contexte OpenGL
 	wglMakeCurrent(m_pDC->GetSafeHdc(), m_hRC);
@@ -6051,7 +6089,11 @@ void CEntornVGIView::OnObjecteCamio()
 
 	//	---- Entorn VGI: ATENCIÓ!!. Canviar l'escala per a centrar la vista (Ortogràfica)
 
+	escala = 3.5;
+
 	//  ---- Entorn VGI: ATENCIÓ!!. Modificar R per centrar la Vista a la mida de l'objecte (Perspectiva)
+
+	escalaPersp = 8.0;
 
 	// Entorn VGI: Activació el contexte OpenGL
 	wglMakeCurrent(m_pDC->GetSafeHdc(), m_hRC);
