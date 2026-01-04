@@ -123,6 +123,11 @@ void dibuixa_EscenaGL(GLuint sh_programID, bool eix, GLuint axis_Id, CMask3D rei
 	switch (objecte)
 	{
 		//Camio
+	case OCTOPUS:
+		SeleccionaColorMaterial(sh_programID, col_object, sw_mat);
+		octopus(sh_programID, MatriuVista, MatriuTG, sw_mat);
+		break;
+
 	case CAMIO:
 		camio(sh_programID, MatriuVista, MatriuTG, sw_mat);
 		break;
@@ -526,6 +531,16 @@ void camio(GLuint sh_programID, glm::mat4 MatriuVista, glm::mat4 MatriuTG, bool 
 	rueda(-rueda_separacion_x, rueda_separacion_y);
 	rueda(rueda_separacion_x, -rueda_separacion_y);
 	rueda(-rueda_separacion_x, -rueda_separacion_y);
+
+	col_object = { 0.5, 0.4, 0.9, 1 };
+
+	ModelMatrix = glm::translate(MatriuTG, vec3(0, 0, -0.2));
+	ModelMatrix = glm::scale(ModelMatrix, vec3(100.0, 100.0, 0.00001));
+
+	glUniformMatrix4fv(glGetUniformLocation(sh_programID, "modelMatrix"), 1, GL_FALSE, &ModelMatrix[0][0]);
+	NormalMatrix = transpose(inverse(MatriuVista * ModelMatrix));
+	glUniformMatrix4fv(glGetUniformLocation(sh_programID, "normalMatrix"), 1, GL_FALSE, &NormalMatrix[0][0]);
+	draw_TriEBO_Object(GLUT_CUBE);
 }
 
 // OBJECTE ARC
@@ -696,6 +711,104 @@ CVAO loadSea_VAO(CColor colorM)
 	return seaVAO;
 }
 
+
+void octopus(GLuint shaderId, glm::mat4 MatriuVista, glm::mat4 MatriuTG, bool sw_mat[5])
+{
+	CColor col_object;
+	glm::mat4 NormalMatrix(1.0), ModelMatrix(1.0), TransMatrix(1.0);
+
+	// Colores para las 8 potas
+	CColor colores_potas[8] = {
+		{1.0, 0.0, 0.0, 1.0},    // Rojo - Pota 0
+		{1.0, 0.5, 0.0, 1.0},    // Naranja - Pota 1	
+		{1.0, 1.0, 0.0, 1.0},    // Amarillo - Pota 2
+		{0.0, 1.0, 0.0, 1.0},    // Verde - Pota 3
+		{0.0, 1.0, 1.0, 1.0},    // Cyan - Pota 4
+		{0.0, 0.0, 1.0, 1.0},    // Azul - Pota 5
+		{1.0, 0.0, 1.0, 1.0},    // Magenta - Pota 6
+		{0.5, 0.0, 1.0, 1.0}     // Violeta - Pota 7
+	};
+
+	// EJE CENTRAL - Color gris
+	col_object.r = 0.7; col_object.g = 0.7; col_object.b = 0.7; col_object.a = 1.0;
+	SeleccionaColorMaterial(shaderId, col_object, sw_mat);
+
+	// BASE (cilindro con tapas) - D=6.0, h=1.0
+	ModelMatrix = glm::scale(ModelMatrix, vec3(3.0f, 3.0f, 1.0f));   // DIMENSIONES: Radio=3.0, Altura=1.0
+	glUniformMatrix4fv(glGetUniformLocation(shaderId, "modelMatrix"), 1, GL_FALSE, &ModelMatrix[0][0]);
+	NormalMatrix = transpose(inverse(MatriuVista * ModelMatrix));
+	glUniformMatrix4fv(glGetUniformLocation(shaderId, "normalMatrix"), 1, GL_FALSE, &NormalMatrix[0][0]);
+	draw_TriEBO_Object(GLU_CYLINDER);
+
+	// PILAR (cilindro sin tapas) - D=2.0, h=20.0
+	ModelMatrix = glm::translate(MatriuTG, vec3(0.0f, 0.0f, 1.0f)); // ALTURA CORREGIDA: 10.5
+	ModelMatrix = glm::scale(ModelMatrix, vec3(1.0f, 1.0f, 2.0f));  // Radio=1.0 (D=2.0), altura=20.0
+	glUniformMatrix4fv(glGetUniformLocation(shaderId, "modelMatrix"), 1, GL_FALSE, &ModelMatrix[0][0]);
+	NormalMatrix = transpose(inverse(MatriuVista * ModelMatrix));
+	glUniformMatrix4fv(glGetUniformLocation(shaderId, "normalMatrix"), 1, GL_FALSE, &NormalMatrix[0][0]);
+	draw_TriEBO_Object(GLU_CYLINDER);
+
+	// ROTOR (esfera) - D=5.0
+	ModelMatrix = glm::translate(MatriuTG, vec3(0.0f, 0.0f, 8.0f)); // ALTURA CORREGIDA: 20.5
+	ModelMatrix = glm::scale(ModelMatrix, vec3(5.0f, 5.0f, 5.0f));   // Radio=2.5 (D=5.0)
+	glUniformMatrix4fv(glGetUniformLocation(shaderId, "modelMatrix"), 1, GL_FALSE, &ModelMatrix[0][0]);
+	NormalMatrix = transpose(inverse(MatriuVista * ModelMatrix));
+	glUniformMatrix4fv(glGetUniformLocation(shaderId, "normalMatrix"), 1, GL_FALSE, &NormalMatrix[0][0]);
+	draw_TriEBO_Object(GLU_SPHERE);
+
+	// POTAS (8 brazos)
+	for (int i = 0; i < 8; i++) {
+		float angulo = glm::radians(45.0f * i);
+		float radio_rotor = 5.0f; // Radio del rotor
+
+		// Brazos conectados al rotor
+		float x_base = 0;
+		float y_base = 0;
+		float z_base = 8.0f; // ALTURA CORREGIDA: 20.5 (misma que rotor)
+
+		// Color de la pota
+		SeleccionaColorMaterial(shaderId, colores_potas[i], sw_mat);
+
+		// BRAZO (cilindro sin tapas)
+		ModelMatrix = glm::translate(MatriuTG, vec3(x_base, y_base, z_base));
+		ModelMatrix = glm::rotate(ModelMatrix, angulo, vec3(0.0f, 0.0f, 1.0f));
+		ModelMatrix = glm::rotate(ModelMatrix, radians(90.0f), vec3(0.0f, 1.0f, 0.0f)); // Horizontal
+		ModelMatrix = glm::scale(ModelMatrix, vec3(0.75f, 0.75f, 20.0f)); // Radio=0.4 (D=0.8), largo=8.0
+		glUniformMatrix4fv(glGetUniformLocation(shaderId, "modelMatrix"), 1, GL_FALSE, &ModelMatrix[0][0]);
+		NormalMatrix = transpose(inverse(MatriuVista * ModelMatrix));
+		glUniformMatrix4fv(glGetUniformLocation(shaderId, "normalMatrix"), 1, GL_FALSE, &NormalMatrix[0][0]);
+		draw_TriEBO_Object(GLU_CYLINDER);
+
+		// CABINA (elipsoide)
+		float x_cabina = x_base + cos(angulo) * 20.0f;
+		float y_cabina = y_base + sin(angulo) * 20.0f;
+
+		ModelMatrix = glm::translate(MatriuTG, vec3(x_cabina, y_cabina, z_base));
+		ModelMatrix = glm::rotate(ModelMatrix, angulo + radians(90.0f), vec3(0.0f, 0.0f, 1.0f));
+		ModelMatrix = glm::scale(ModelMatrix, vec3(4.5f, 3.0f, 3.0f)); // Elipsoide achatado
+		glUniformMatrix4fv(glGetUniformLocation(shaderId, "modelMatrix"), 1, GL_FALSE, &ModelMatrix[0][0]);
+		NormalMatrix = transpose(inverse(MatriuVista * ModelMatrix));
+		glUniformMatrix4fv(glGetUniformLocation(shaderId, "normalMatrix"), 1, GL_FALSE, &NormalMatrix[0][0]);
+		draw_TriEBO_Object(GLU_SPHERE);
+
+		// BOMBOLLA (elipsoide transparente)
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		col_object.r = 0.5; col_object.g = 1.0; col_object.b = 1.0; col_object.a = 0.5;
+		SeleccionaColorMaterial(shaderId, col_object, sw_mat);
+
+		ModelMatrix = glm::translate(MatriuTG, vec3(x_cabina, y_cabina, z_base + 3.0f));
+		ModelMatrix = glm::rotate(ModelMatrix, angulo + radians(90.0f), vec3(0.0f, 0.0f, 1.0f));
+		ModelMatrix = glm::scale(ModelMatrix, vec3(2.0f, 1.5f, 0.5f)); // Elipsoide más pequeño y muy achatado
+		glUniformMatrix4fv(glGetUniformLocation(shaderId, "modelMatrix"), 1, GL_FALSE, &ModelMatrix[0][0]);
+		NormalMatrix = transpose(inverse(MatriuVista * ModelMatrix));
+		glUniformMatrix4fv(glGetUniformLocation(shaderId, "normalMatrix"), 1, GL_FALSE, &NormalMatrix[0][0]);
+		draw_TriEBO_Object(GLU_SPHERE);
+
+		glDisable(GL_BLEND);
+	}
+}
 
 // OBJECTE TIE: FETS PER ALUMNES -----------------------------------------------------------------
 

@@ -228,13 +228,17 @@
 #define ID_PROJECCI32908                32908
 #define ID_PROJECCIO_AXONOMETRICA       32909
 #define ID_OBJECTE_CAMIO                32910
+#define ID_OBJECTE_OCTOPUS              32911
+#define ID_TEXTURA_MAPAMUNDI            32912
+#define ID_TEXTURA_BRICS                32913
+#define ID_TEXTURA_SAC                  32914
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        311
-#define _APS_NEXT_COMMAND_VALUE         32911
+#define _APS_NEXT_COMMAND_VALUE         32915
 #define _APS_NEXT_CONTROL_VALUE         1000
 #define _APS_NEXT_SYMED_VALUE           310
 #endif

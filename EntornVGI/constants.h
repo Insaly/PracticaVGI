@@ -28,6 +28,7 @@
 #define POLARX 'X'
 
 //-------------- VGI: Tipus d'Objectes
+#define OCTOPUS 'o'
 #define ARC 'a'
 #define CAMIO 'm'
 #define CILINDRE 'y'

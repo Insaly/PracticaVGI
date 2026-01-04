@@ -360,6 +360,7 @@ BEGIN
         MENUITEM "Matriu Primitives",           ID_OBJECTE_MATRIU_PRIMITIVES, CHECKED
         MENUITEM "Matriu Primitives VAO",       ID_OBJECTE_MATRIU_PRIMITIVES_VBO, CHECKED
         MENUITEM "Camio",                       ID_OBJECTE_CAMIO, CHECKED
+        MENUITEM "Octopus",                     ID_OBJECTE_OCTOPUS, CHECKED
     END
     POPUP "Transforma"
     BEGIN
@@ -408,6 +409,9 @@ BEGIN
         POPUP "Textura"
         BEGIN
             MENUITEM "FItxer Imatge SOIL",          ID_ILUMINACIO_TEXTURA_FITXERIMATGE, CHECKED
+            MENUITEM "Mapa Mundi",                  ID_TEXTURA_MAPAMUNDI, CHECKED
+            MENUITEM "Brics",                       ID_TEXTURA_BRICS, CHECKED
+            MENUITEM "Sac",                         ID_TEXTURA_SAC, CHECKED
         END
         MENUITEM "Flag_Invert_Y?",              ID_ILUMINACIO_TEXTURA_FLAGINVERTY, CHECKED
     END

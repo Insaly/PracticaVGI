@@ -450,6 +450,14 @@ public:
 	afx_msg void OnUpdateProjeccioAxonometrica(CCmdUI* pCmdUI);
 	afx_msg void OnObjecteCamio();
 	afx_msg void OnUpdateObjecteCamio(CCmdUI* pCmdUI);
+	afx_msg void OnObjecteOctopus();
+	afx_msg void OnUpdateObjecteOctopus(CCmdUI* pCmdUI);
+	afx_msg void OnTexturaBrics();
+	afx_msg void OnUpdateTexturaBrics(CCmdUI* pCmdUI);
+	afx_msg void OnTexturaMapamundi();
+	afx_msg void OnUpdateTexturaMapamundi(CCmdUI* pCmdUI);
+	afx_msg void OnTexturaSac();
+	afx_msg void OnUpdateTexturaSac(CCmdUI* pCmdUI);
 };
 
 #ifndef _DEBUG  // Versión de depuración en EntornVGIView.cpp

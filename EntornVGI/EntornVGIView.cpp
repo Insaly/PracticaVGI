@@ -218,8 +218,16 @@ BEGIN_MESSAGE_MAP(CEntornVGIView, CView)
 	ON_UPDATE_COMMAND_UI(ID_PROJECCIO_ORTOGRAFICA, &CEntornVGIView::OnUpdateProjeccioOrtografica)
 	ON_COMMAND(ID_PROJECCIO_AXONOMETRICA, &CEntornVGIView::OnProjeccioAxonometrica)
 	ON_UPDATE_COMMAND_UI(ID_PROJECCIO_AXONOMETRICA, &CEntornVGIView::OnUpdateProjeccioAxonometrica)
-		ON_COMMAND(ID_OBJECTE_CAMIO, &CEntornVGIView::OnObjecteCamio)
-		ON_UPDATE_COMMAND_UI(ID_OBJECTE_CAMIO, &CEntornVGIView::OnUpdateObjecteCamio)
+	ON_COMMAND(ID_OBJECTE_CAMIO, &CEntornVGIView::OnObjecteCamio)
+	ON_UPDATE_COMMAND_UI(ID_OBJECTE_CAMIO, &CEntornVGIView::OnUpdateObjecteCamio)
+	ON_COMMAND(ID_OBJECTE_OCTOPUS, &CEntornVGIView::OnObjecteOctopus)
+	ON_UPDATE_COMMAND_UI(ID_OBJECTE_OCTOPUS, &CEntornVGIView::OnUpdateObjecteOctopus)
+		ON_COMMAND(ID_TEXTURA_BRICS, &CEntornVGIView::OnTexturaBrics)
+		ON_UPDATE_COMMAND_UI(ID_TEXTURA_BRICS, &CEntornVGIView::OnUpdateTexturaBrics)
+		ON_COMMAND(ID_TEXTURA_MAPAMUNDI, &CEntornVGIView::OnTexturaMapamundi)
+		ON_UPDATE_COMMAND_UI(ID_TEXTURA_MAPAMUNDI, &CEntornVGIView::OnUpdateTexturaMapamundi)
+		ON_COMMAND(ID_TEXTURA_SAC, &CEntornVGIView::OnTexturaSac)
+		ON_UPDATE_COMMAND_UI(ID_TEXTURA_SAC, &CEntornVGIView::OnUpdateTexturaSac)
 		END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -4041,7 +4049,7 @@ void CEntornVGIView::OnObjecteCub()
 	//	---- Entorn VGI: ATENCIÓ!!. Canviar l'escala per a centrar la vista (Ortogràfica)
 
 	escala = 4.1;
-
+	
 	//  ---- Entorn VGI: ATENCIÓ!!. Modificar R per centrar la Vista a la mida de l'objecte (Perspectiva)
 
 	escalaPersp = 8.6;
@@ -6121,4 +6129,85 @@ void CEntornVGIView::OnUpdateObjecteCamio(CCmdUI* pCmdUI)
 {
 	if (objecte == CAMIO) pCmdUI->SetCheck(1);
 	else pCmdUI->SetCheck(0);
+}
+
+void CEntornVGIView::OnObjecteOctopus()
+{
+	// TODO: Agregue aquí su código de controlador de comandos
+	objecte = OCTOPUS;
+
+	//	---- Entorn VGI: ATENCIÓ!!. Canviar l'escala per a centrar la vista (Ortogràfica)
+
+	escala = 24;
+
+	//  ---- Entorn VGI: ATENCIÓ!!. Modificar R per centrar la Vista a la mida de l'objecte (Perspectiva)
+
+	escalaPersp = 48;
+
+	// Entorn VGI: Activació el contexte OpenGL
+	wglMakeCurrent(m_pDC->GetSafeHdc(), m_hRC);
+
+	// Càrrega dels VAO's per a construir objecte TIE
+	netejaVAOList();						// Neteja Llista VAO.
+
+	// Posar color objecte (col_obj) al vector de colors del VAO.
+	SetColor4d(col_obj.r, col_obj.g, col_obj.b, col_obj.a);
+
+	Set_VAOList(GLU_SPHERE, loadglutSolidSphere_EBO(1.0, 20, 20));
+	Set_VAOList(GLU_CYLINDER, loadglutSolidCylinder_EBO( 1.0, 1.0, 20, 20));
+
+	// Entorn VGI: Desactivació del contexte OpenGL. Permet la coexistencia d'altres contextes de generació
+	wglMakeCurrent(m_pDC->GetSafeHdc(), NULL);
+
+	// Crida a OnPaint() per redibuixar l'escena
+	InvalidateRect(NULL, false);
+}
+
+void CEntornVGIView::OnUpdateObjecteOctopus(CCmdUI* pCmdUI)
+{
+	if (objecte == OCTOPUS) pCmdUI->SetCheck(1);
+	else pCmdUI->SetCheck(0);
+}
+
+void CEntornVGIView::OnTexturaBrics()
+{
+	textura = TEXTURA_BRICKS;
+
+	// Entorn VGI: Activació del contexte OpenGL
+	wglMakeCurrent(m_pDC->GetSafeHdc(), m_hRC);
+
+	//	Pas de textura al shader
+	glUniform1i(glGetUniformLocation(shader_programID, "texture"), textura);
+
+	// Entorn VGI: Desactivació del contexte OpenGL. Permet la coexistencia d'altres contextes de generació
+	wglMakeCurrent(m_pDC->GetSafeHdc(), NULL);
+
+	// Crida a OnPaint() per redibuixar l'escena
+	InvalidateRect(NULL, false);
+}
+
+void CEntornVGIView::OnUpdateTexturaBrics(CCmdUI* pCmdUI)
+{
+	if (textura ==  TEXTURA_BRICKS) pCmdUI->SetCheck(1);
+	else pCmdUI->SetCheck(0);
+}
+
+void CEntornVGIView::OnTexturaMapamundi()
+{
+	// TODO: Add your command handler code here
+}
+
+void CEntornVGIView::OnUpdateTexturaMapamundi(CCmdUI* pCmdUI)
+{
+	// TODO: Add your command update UI handler code here
+}
+
+void CEntornVGIView::OnTexturaSac()
+{
+	// TODO: Add your command handler code here
+}
+
+void CEntornVGIView::OnUpdateTexturaSac(CCmdUI* pCmdUI)
+{
+	// TODO: Add your command update UI handler code here
 }
