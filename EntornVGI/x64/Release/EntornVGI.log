@@ -1,2 +1,5 @@
-﻿  escena.cpp
-  EntornVGI.vcxproj -> C:\Users\janga\OneDrive\Escritorio\3r Informatica\VGI\PracticaVGI\x64\Release\EntornVGI.exe
+﻿  EntornVGIView.cpp
+C:\Users\lluc\Desktop\Visualització Gràfica Interactiva\PracticaVGI\EntornVGI\EntornVGIView.cpp(6201,18): warning C4806: '==': operación no segura: ningún valor del tipo 'bool' promovido al tipo 'char' puede igualar la constante proporcionada
+  (compilando archivo de origen "/EntornVGIView.cpp")
+  
+  EntornVGI.vcxproj -> C:\Users\lluc\Desktop\Visualització Gràfica Interactiva\PracticaVGI\x64\Release\EntornVGI.exe

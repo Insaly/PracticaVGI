@@ -3231,8 +3231,16 @@ BOOL CEntornVGIView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 	double modul = 0;
 	GLdouble vdir[3] = { 0.0, 0.0, 0.0 };
 
+	// Zoom amb rodeta en Projecció Perspectiva (funciona sempre quan perspectiva està seleccionada)
+	if (projeccio == PERSPECT)
+	{
+		escalaPersp = escalaPersp - (zDelta / 20.0);
+		// Límit mínim de zoom més gran per evitar estar massa a prop
+		if (escalaPersp < 8.0f) escalaPersp = 8.0f;
+		InvalidateRect(NULL, false);
+	}
 	// Funció de zoom quan està activada la funció pan o les T. Geomètriques
-	if ((zzoom || zzoomO) || (transX) || (transY) || (transZ))
+	else if ((zzoom || zzoomO) || (transX) || (transY) || (transZ))
 	{
 		if (camera == CAM_ESFERICA) {	// Càmera Esfèrica
 			OPV.R = OPV.R + zDelta / 4.0;
