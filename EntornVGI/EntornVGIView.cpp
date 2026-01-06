@@ -228,6 +228,8 @@ BEGIN_MESSAGE_MAP(CEntornVGIView, CView)
 		ON_UPDATE_COMMAND_UI(ID_TEXTURA_MAPAMUNDI, &CEntornVGIView::OnUpdateTexturaMapamundi)
 		ON_COMMAND(ID_TEXTURA_SAC, &CEntornVGIView::OnTexturaSac)
 		ON_UPDATE_COMMAND_UI(ID_TEXTURA_SAC, &CEntornVGIView::OnUpdateTexturaSac)
+		ON_COMMAND(ID_OBJECTE_PAISATGE, &CEntornVGIView::OnObjectePaisatge)
+		ON_UPDATE_COMMAND_UI(ID_OBJECTE_PAISATGE, &CEntornVGIView::OnUpdateObjectePaisatge)
 		END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -6210,4 +6212,53 @@ void CEntornVGIView::OnTexturaSac()
 void CEntornVGIView::OnUpdateTexturaSac(CCmdUI* pCmdUI)
 {
 	// TODO: Add your command update UI handler code here
+}
+
+void CEntornVGIView::OnObjectePaisatge()
+{
+	CColor color_Mar;
+
+	color_Mar.r = 0.5;	color_Mar.g = 0.4; color_Mar.b = 0.9; color_Mar.a = 1.0;
+	objecte = PAISATGE;
+
+	//	---- Entorn VGI: ATENCIÓ!!. Canviar l'escala per a centrar la vista (Ortogràfica)
+
+	escala = 20;
+
+	//  ---- Entorn VGI: ATENCIÓ!!. Modificar R per centrar la Vista a la mida de l'objecte (Perspectiva)
+
+	escalaPersp = 100;
+
+	// Entorn VGI: Activació el contexte OpenGL
+	wglMakeCurrent(m_pDC->GetSafeHdc(), m_hRC);
+
+	// Càrrega dels VAO's per a construir objecte ARC
+	netejaVAOList();						// Neteja Llista VAO.
+
+	// Posar color objecte (col_obj) al vector de colors del VAO.
+	SetColor4d(col_obj.r, col_obj.g, col_obj.b, col_obj.a);
+
+	//if (Get_VAOId(GLUT_CUBE) != 0) deleteVAOList(GLUT_CUBE);
+	Set_VAOList(GLUT_CUBE, loadglutSolidCube_EBO(1.0));		// Càrrega Cub de costat 1 com a EBO a la posició GLUT_CUBE.
+
+	//if (Get_VAOId(GLU_SPHERE) != 0) deleteVAOList(GLU_SPHERE);
+	Set_VAOList(GLU_SPHERE, loadgluSphere_EBO(0.5, 20, 20));	// Càrrega Esfera a la posició GLU_SPHERE.
+
+	//if (Get_VAOId(GLUT_TEAPOT) != 0) deleteVAOList(GLUT_TEAPOT);
+	Set_VAOList(GLUT_TEAPOT, loadglutSolidTeapot_VAO());		// Carrega Tetera a la posició GLUT_TEAPOT.
+
+	//if (Get_VAOId(MAR_FRACTAL_VAO) != 0) deleteVAOList(MAR_FRACTAL_VAO);
+	Set_VAOList(MAR_FRACTAL_VAO, loadSea_VAO(color_Mar));		// Carrega Mar a la posició MAR_FRACTAL_VAO.
+
+	// Entorn VGI: Desactivació del contexte OpenGL. Permet la coexistencia d'altres contextes de generació
+	wglMakeCurrent(m_pDC->GetSafeHdc(), NULL);
+
+	// Crida a OnPaint() per redibuixar l'escena
+	InvalidateRect(NULL, false);
+}
+
+void CEntornVGIView::OnUpdateObjectePaisatge(CCmdUI* pCmdUI)
+{
+	if (objecte == PAISATGE) pCmdUI->SetCheck(1);
+	else pCmdUI->SetCheck(0);
 }

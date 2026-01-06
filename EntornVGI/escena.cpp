@@ -122,6 +122,29 @@ void dibuixa_EscenaGL(GLuint sh_programID, bool eix, GLuint axis_Id, CMask3D rei
 
 	switch (objecte)
 	{
+	case PAISATGE:
+		SeleccionaColorMaterial(sh_programID, col_object, sw_mat);
+		faro(sh_programID, MatriuVista, MatriuTG, sw_mat);
+
+		// Activar transparència
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		// Dibuix geometria Mar
+		color_Mar.r = 0.5;	color_Mar.g = 0.4; color_Mar.b = 0.9; color_Mar.a = 0.5;
+		// Definició propietats de reflexió (emissió, ambient, difusa, especular) del material pel color de l'objecte.
+		SeleccionaColorMaterial(sh_programID, color_Mar, sw_mat);
+		// Pas ModelView Matrix a shader
+		glUniformMatrix4fv(glGetUniformLocation(sh_programID, "modelMatrix"), 1, GL_FALSE, &ModelMatrix[0][0]);
+		NormalMatrix = transpose(inverse(MatriuVista * ModelMatrix));
+		// Pas NormalMatrix a shader
+		glUniformMatrix4fv(glGetUniformLocation(sh_programID, "normalMatrix"), 1, GL_FALSE, &NormalMatrix[0][0]);
+		draw_TriVAO_Object(MAR_FRACTAL_VAO);
+
+		// Desactivar transparència
+		glDisable(GL_BLEND);
+		break;
+
 		//Camio
 	case OCTOPUS:
 		SeleccionaColorMaterial(sh_programID, col_object, sw_mat);
@@ -541,6 +564,48 @@ void camio(GLuint sh_programID, glm::mat4 MatriuVista, glm::mat4 MatriuTG, bool 
 	NormalMatrix = transpose(inverse(MatriuVista * ModelMatrix));
 	glUniformMatrix4fv(glGetUniformLocation(sh_programID, "normalMatrix"), 1, GL_FALSE, &NormalMatrix[0][0]);
 	draw_TriEBO_Object(GLUT_CUBE);
+}
+
+// FARO PER AL PAISATGE
+void faro(GLuint shaderID, glm::mat4 MatriuVista, glm::mat4 MatriuTG, bool sw_mat[5])
+{
+	glm::mat4 NormalMatrix(1.0), ModelMatrix(1.0);
+	CColor col_object;
+
+	col_object.r = 1.0;		col_object.g = 0.5;		col_object.b = 0.0;		col_object.a = 1.0;	// Color groc
+	SeleccionaColorMaterial(shaderID, col_object, sw_mat);
+
+	// Pas ModelView Matrix a shader
+	glUniformMatrix4fv(glGetUniformLocation(shaderID, "modelMatrix"), 1, GL_FALSE, &ModelMatrix[0][0]);
+	// Pas NormalMatrix a shader
+	NormalMatrix = transpose(inverse(MatriuVista * ModelMatrix));
+	glUniformMatrix4fv(glGetUniformLocation(shaderID, "normalMatrix"), 1, GL_FALSE, &NormalMatrix[0][0]);
+	cilindre(7.5, 4.5, 20, 50, 1);
+
+	ModelMatrix = glm::translate(MatriuTG, vec3(0.0f, 0.0f, 28.0f));
+	// Pas ModelView Matrix a shader
+	glUniformMatrix4fv(glGetUniformLocation(shaderID, "modelMatrix"), 1, GL_FALSE, &ModelMatrix[0][0]);
+	// Pas NormalMatrix a shader
+	NormalMatrix = transpose(inverse(MatriuVista * ModelMatrix));
+	glUniformMatrix4fv(glGetUniformLocation(shaderID, "normalMatrix"), 1, GL_FALSE, &NormalMatrix[0][0]);
+	cilindre(6, 6, 1, 50, 1);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	col_object.r = 1.0;		col_object.g = 1.0;		col_object.b = 0.0;		col_object.a = 0.3;	// Color groc
+	SeleccionaColorMaterial(shaderID, col_object, sw_mat);
+
+	ModelMatrix = glm::translate(MatriuTG, vec3(0.0f, 0.0f, 20.0f));
+	// Pas ModelView Matrix a shader
+	glUniformMatrix4fv(glGetUniformLocation(shaderID, "modelMatrix"), 1, GL_FALSE, &ModelMatrix[0][0]);
+	// Pas NormalMatrix a shader
+	NormalMatrix = transpose(inverse(MatriuVista * ModelMatrix));
+	glUniformMatrix4fv(glGetUniformLocation(shaderID, "normalMatrix"), 1, GL_FALSE, &NormalMatrix[0][0]);
+	cilindre(4.5, 4.5, 8, 50, 1);
+
+	glDisable(GL_BLEND);
+	
 }
 
 // OBJECTE ARC

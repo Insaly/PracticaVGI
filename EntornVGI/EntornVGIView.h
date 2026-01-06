@@ -458,6 +458,8 @@ public:
 	afx_msg void OnUpdateTexturaMapamundi(CCmdUI* pCmdUI);
 	afx_msg void OnTexturaSac();
 	afx_msg void OnUpdateTexturaSac(CCmdUI* pCmdUI);
+	afx_msg void OnObjectePaisatge();
+	afx_msg void OnUpdateObjectePaisatge(CCmdUI* pCmdUI);
 };
 
 #ifndef _DEBUG  // Versión de depuración en EntornVGIView.cpp
