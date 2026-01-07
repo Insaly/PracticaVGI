@@ -166,8 +166,42 @@ void dibuixa_EscenaGL(GLuint sh_programID, bool eix, GLuint axis_Id, CMask3D rei
 		CPunt3D p;
 
 		p = Punt_Lemniscata3D(temps, 500); // Càlcul del punt
-		ModelMatrix = glm::translate(MatriuTG, vec3(p.x, p.y, p.z));
-		ModelMatrix = glm::scale(ModelMatrix, vec3(0.5f, 0.5f, 0.5f));
+		CPunt3D p2 = Punt_Lemniscata3D(temps + 0.01f, 500);
+
+		glm::vec3 T = glm::normalize(glm::vec3(
+			p2.x - p.x,
+			p2.y - p.y,
+			p2.z - p.z
+		));
+
+		// Vector "up" del mundo
+		glm::vec3 up(0.0f, 0.0f, 1.0f);
+
+		// Binormal B
+		glm::vec3 B = glm::normalize(glm::cross(T, up));
+
+		// Normal N
+		glm::vec3 N = glm::cross(B, T);
+
+		glm::mat4 FrenetMatrix(1.0f);
+
+		// Columnas = ejes locales del objeto
+		FrenetMatrix[0] = glm::vec4(B, 0.0f); // X
+		FrenetMatrix[1] = glm::vec4(T, 0.0f); // Y (dirección avance)
+		FrenetMatrix[2] = glm::vec4(N, 0.0f); // Z
+
+		ModelMatrix = MatriuTG;
+		ModelMatrix = glm::translate(ModelMatrix, glm::vec3(p.x, p.y, p.z));
+		ModelMatrix = ModelMatrix * FrenetMatrix;
+		ModelMatrix = glm::scale(ModelMatrix, glm::vec3(0.5f));
+
+		glUniformMatrix4fv(glGetUniformLocation(sh_programID, "modelMatrix"),
+			1, GL_FALSE, &ModelMatrix[0][0]);
+
+		NormalMatrix = transpose(inverse(MatriuVista * ModelMatrix));
+		glUniformMatrix4fv(glGetUniformLocation(sh_programID, "normalMatrix"),
+			1, GL_FALSE, &NormalMatrix[0][0]);
+
 		tie(sh_programID, MatriuVista, ModelMatrix, sw_mat);
 
 
