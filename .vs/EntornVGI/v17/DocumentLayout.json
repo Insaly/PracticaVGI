@@ -1,25 +1,25 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\janga\\OneDrive\\Escritorio\\3r Informatica\\VGI\\PracticaVGI\\",
+  "WorkspaceRootPath": "C:\\Users\\lluc\\Desktop\\Visualitzaci\u00F3 Gr\u00E0fica Interactiva\\PracticaVGI\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{16DA3653-49D0-4DA9-B3B2-A642AB40D71C}|EntornVGI\\EntornVGI.vcxproj|C:\\Users\\janga\\OneDrive\\Escritorio\\3r Informatica\\VGI\\PracticaVGI\\EntornVGI\\EntornVGIView.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{16DA3653-49D0-4DA9-B3B2-A642AB40D71C}|EntornVGI\\EntornVGI.vcxproj|C:\\Users\\lluc\\Desktop\\Visualitzaci\u00F3 Gr\u00E0fica Interactiva\\PracticaVGI\\EntornVGI\\EntornVGIView.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{16DA3653-49D0-4DA9-B3B2-A642AB40D71C}|EntornVGI\\EntornVGI.vcxproj|solutionrelative:EntornVGI\\EntornVGIView.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{16DA3653-49D0-4DA9-B3B2-A642AB40D71C}|EntornVGI\\EntornVGI.vcxproj|C:\\Users\\janga\\OneDrive\\Escritorio\\3r Informatica\\VGI\\PracticaVGI\\EntornVGI\\escena.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{16DA3653-49D0-4DA9-B3B2-A642AB40D71C}|EntornVGI\\EntornVGI.vcxproj|C:\\Users\\lluc\\Desktop\\Visualitzaci\u00F3 Gr\u00E0fica Interactiva\\PracticaVGI\\EntornVGI\\escena.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{16DA3653-49D0-4DA9-B3B2-A642AB40D71C}|EntornVGI\\EntornVGI.vcxproj|solutionrelative:EntornVGI\\escena.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{16DA3653-49D0-4DA9-B3B2-A642AB40D71C}|EntornVGI\\EntornVGI.vcxproj|C:\\Users\\janga\\OneDrive\\Escritorio\\3r Informatica\\VGI\\PracticaVGI\\EntornVGI\\escena.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{16DA3653-49D0-4DA9-B3B2-A642AB40D71C}|EntornVGI\\EntornVGI.vcxproj|C:\\Users\\lluc\\Desktop\\Visualitzaci\u00F3 Gr\u00E0fica Interactiva\\PracticaVGI\\EntornVGI\\escena.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{16DA3653-49D0-4DA9-B3B2-A642AB40D71C}|EntornVGI\\EntornVGI.vcxproj|solutionrelative:EntornVGI\\escena.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{16DA3653-49D0-4DA9-B3B2-A642AB40D71C}|EntornVGI\\EntornVGI.vcxproj|C:\\Users\\janga\\OneDrive\\Escritorio\\3r Informatica\\VGI\\PracticaVGI\\EntornVGI\\trajectories.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{16DA3653-49D0-4DA9-B3B2-A642AB40D71C}|EntornVGI\\EntornVGI.vcxproj|C:\\Users\\lluc\\Desktop\\Visualitzaci\u00F3 Gr\u00E0fica Interactiva\\PracticaVGI\\EntornVGI\\trajectories.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{16DA3653-49D0-4DA9-B3B2-A642AB40D71C}|EntornVGI\\EntornVGI.vcxproj|solutionrelative:EntornVGI\\trajectories.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{16DA3653-49D0-4DA9-B3B2-A642AB40D71C}|EntornVGI\\EntornVGI.vcxproj|C:\\Users\\janga\\OneDrive\\Escritorio\\3r Informatica\\VGI\\PracticaVGI\\EntornVGI\\trajectories.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{16DA3653-49D0-4DA9-B3B2-A642AB40D71C}|EntornVGI\\EntornVGI.vcxproj|C:\\Users\\lluc\\Desktop\\Visualitzaci\u00F3 Gr\u00E0fica Interactiva\\PracticaVGI\\EntornVGI\\trajectories.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{16DA3653-49D0-4DA9-B3B2-A642AB40D71C}|EntornVGI\\EntornVGI.vcxproj|solutionrelative:EntornVGI\\trajectories.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
@@ -40,61 +40,57 @@
               "$type": "Document",
               "DocumentIndex": 2,
               "Title": "escena.h",
-              "DocumentMoniker": "C:\\Users\\janga\\OneDrive\\Escritorio\\3r Informatica\\VGI\\PracticaVGI\\EntornVGI\\escena.h",
+              "DocumentMoniker": "C:\\Users\\lluc\\Desktop\\Visualitzaci\u00F3 Gr\u00E0fica Interactiva\\PracticaVGI\\EntornVGI\\escena.h",
               "RelativeDocumentMoniker": "EntornVGI\\escena.h",
-              "ToolTip": "C:\\Users\\janga\\OneDrive\\Escritorio\\3r Informatica\\VGI\\PracticaVGI\\EntornVGI\\escena.h",
+              "ToolTip": "C:\\Users\\lluc\\Desktop\\Visualitzaci\u00F3 Gr\u00E0fica Interactiva\\PracticaVGI\\EntornVGI\\escena.h",
               "RelativeToolTip": "EntornVGI\\escena.h",
               "ViewState": "AgIAAAYAAAAAAAAAAAAAABcAAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-01-07T16:34:18.877Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-07T16:34:18.877Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
               "Title": "trajectories.cpp",
-              "DocumentMoniker": "C:\\Users\\janga\\OneDrive\\Escritorio\\3r Informatica\\VGI\\PracticaVGI\\EntornVGI\\trajectories.cpp",
+              "DocumentMoniker": "C:\\Users\\lluc\\Desktop\\Visualitzaci\u00F3 Gr\u00E0fica Interactiva\\PracticaVGI\\EntornVGI\\trajectories.cpp",
               "RelativeDocumentMoniker": "EntornVGI\\trajectories.cpp",
-              "ToolTip": "C:\\Users\\janga\\OneDrive\\Escritorio\\3r Informatica\\VGI\\PracticaVGI\\EntornVGI\\trajectories.cpp",
+              "ToolTip": "C:\\Users\\lluc\\Desktop\\Visualitzaci\u00F3 Gr\u00E0fica Interactiva\\PracticaVGI\\EntornVGI\\trajectories.cpp",
               "RelativeToolTip": "EntornVGI\\trajectories.cpp",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAA7AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-01-07T16:20:45.956Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-07T16:20:45.956Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
               "Title": "trajectories.h",
-              "DocumentMoniker": "C:\\Users\\janga\\OneDrive\\Escritorio\\3r Informatica\\VGI\\PracticaVGI\\EntornVGI\\trajectories.h",
+              "DocumentMoniker": "C:\\Users\\lluc\\Desktop\\Visualitzaci\u00F3 Gr\u00E0fica Interactiva\\PracticaVGI\\EntornVGI\\trajectories.h",
               "RelativeDocumentMoniker": "EntornVGI\\trajectories.h",
-              "ToolTip": "C:\\Users\\janga\\OneDrive\\Escritorio\\3r Informatica\\VGI\\PracticaVGI\\EntornVGI\\trajectories.h",
+              "ToolTip": "C:\\Users\\lluc\\Desktop\\Visualitzaci\u00F3 Gr\u00E0fica Interactiva\\PracticaVGI\\EntornVGI\\trajectories.h",
               "RelativeToolTip": "EntornVGI\\trajectories.h",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-01-07T16:01:54.256Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-07T16:01:54.256Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "escena.cpp",
-              "DocumentMoniker": "C:\\Users\\janga\\OneDrive\\Escritorio\\3r Informatica\\VGI\\PracticaVGI\\EntornVGI\\escena.cpp",
+              "DocumentMoniker": "C:\\Users\\lluc\\Desktop\\Visualitzaci\u00F3 Gr\u00E0fica Interactiva\\PracticaVGI\\EntornVGI\\escena.cpp",
               "RelativeDocumentMoniker": "EntornVGI\\escena.cpp",
-              "ToolTip": "C:\\Users\\janga\\OneDrive\\Escritorio\\3r Informatica\\VGI\\PracticaVGI\\EntornVGI\\escena.cpp",
+              "ToolTip": "C:\\Users\\lluc\\Desktop\\Visualitzaci\u00F3 Gr\u00E0fica Interactiva\\PracticaVGI\\EntornVGI\\escena.cpp",
               "RelativeToolTip": "EntornVGI\\escena.cpp",
               "ViewState": "AgIAAEcAAAAAAAAAAADwv1QAAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-11-24T07:19:34.19Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-24T07:19:34.19Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "EntornVGIView.cpp",
-              "DocumentMoniker": "C:\\Users\\janga\\OneDrive\\Escritorio\\3r Informatica\\VGI\\PracticaVGI\\EntornVGI\\EntornVGIView.cpp",
+              "DocumentMoniker": "C:\\Users\\lluc\\Desktop\\Visualitzaci\u00F3 Gr\u00E0fica Interactiva\\PracticaVGI\\EntornVGI\\EntornVGIView.cpp",
               "RelativeDocumentMoniker": "EntornVGI\\EntornVGIView.cpp",
-              "ToolTip": "C:\\Users\\janga\\OneDrive\\Escritorio\\3r Informatica\\VGI\\PracticaVGI\\EntornVGI\\EntornVGIView.cpp",
+              "ToolTip": "C:\\Users\\lluc\\Desktop\\Visualitzaci\u00F3 Gr\u00E0fica Interactiva\\PracticaVGI\\EntornVGI\\EntornVGIView.cpp",
               "RelativeToolTip": "EntornVGI\\EntornVGIView.cpp",
               "ViewState": "AgIAAGgEAAAAAAAAAADwv3gEAABPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",

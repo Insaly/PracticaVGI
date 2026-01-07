@@ -41,6 +41,7 @@
 
 float escala = 5.0;
 float escalaPersp = 100.0;
+float escalaOrto = 5.0;	// Escala de zoom per a les projeccions Ortogràfica i Axonometrica
 float temps = 0;
 
 
@@ -986,7 +987,7 @@ void CEntornVGIView::OnPaint()
 		glViewport(0, 0, w, h);
 
 		// Aquí farem les crides per a definir Viewport, Projecció i Càmara: INICI -------------------------
-		ProjectionMatrix = Projeccio_Orto(shader_programID, 0, 0, w, h, escala);
+		ProjectionMatrix = Projeccio_Orto(shader_programID, 0, 0, w, h, escala, escalaOrto, OPV.R * 2.0f);
 		ViewMatrix = Vista_Esferica(shader_programID, OPV, Vis_Polar, pan, tr_cpv, tr_cpvF, c_fons, col_obj, objecte, mida, pas,
 			front_faces, oculta, test_vis,
 			ilumina, llum_ambient, llumGL, ifixe, ilum2sides,
@@ -1014,7 +1015,7 @@ void CEntornVGIView::OnPaint()
 
 				// Definició de Viewport, Projecció i Càmara
 		glScissor(0, 0, w / 2, h / 2);
-		ProjectionMatrix = Projeccio_Orto(shader_programID, 0, 0, w / 2, h / 2, escala);
+		ProjectionMatrix = Projeccio_Orto(shader_programID, 0, 0, w / 2, h / 2, escala, escalaOrto);
 		ViewMatrix = Vista_Ortografica(shader_programID, 1, OPV.R, c_fons, col_obj, objecte, mida, pas,
 			front_faces, oculta, test_vis,
 			ilumina, llum_ambient, llumGL, ifixe, ilum2sides,
@@ -1026,7 +1027,7 @@ void CEntornVGIView::OnPaint()
 		// ISOMÈTRICA (Inferior Dreta)
 				// Definició de Viewport, Projecció i Càmara
 		glScissor(w / 2, 0, w / 2, h / 2);
-		ProjectionMatrix = Projeccio_Orto(shader_programID, w / 2, 0, w / 2, h / 2, escala);
+		ProjectionMatrix = Projeccio_Orto(shader_programID, w / 2, 0, w / 2, h / 2, escala, escalaOrto);
 		ViewMatrix = Vista_Ortografica(shader_programID, 3, OPV.R, c_fons, col_obj, objecte, mida, pas,
 			front_faces, oculta, test_vis,
 			ilumina, llum_ambient, llumGL, ifixe, ilum2sides,
@@ -1039,7 +1040,7 @@ void CEntornVGIView::OnPaint()
 		// ALÇAT (Superior Esquerra)
 				// Definició de Viewport, Projecció i Càmara
 		glScissor(0, h / 2, w / 2, h / 2);
-		ProjectionMatrix = Projeccio_Orto(shader_programID, 0, h / 2, w / 2, h / 2, escala);
+		ProjectionMatrix = Projeccio_Orto(shader_programID, 0, h / 2, w / 2, h / 2, escala, escalaOrto);
 		ViewMatrix = Vista_Ortografica(shader_programID, 0, OPV.R, c_fons, col_obj, objecte, mida, pas,
 			front_faces, oculta, test_vis,
 			ilumina, llum_ambient, llumGL, ifixe, ilum2sides,
@@ -1052,7 +1053,7 @@ void CEntornVGIView::OnPaint()
 
 				// Definició de Viewport, Projecció i Càmara
 		glScissor(w / 2, h / 2, w / 2, h / 2);
-		ProjectionMatrix = Projeccio_Orto(shader_programID, w / 2, h / 2, w / 2, h / 2, escala);
+		ProjectionMatrix = Projeccio_Orto(shader_programID, w / 2, h / 2, w / 2, h / 2, escala, escalaOrto);
 		ViewMatrix = Vista_Ortografica(shader_programID, 2, OPV.R, c_fons, col_obj, objecte, mida, pas,
 			front_faces, oculta, test_vis,
 			ilumina, llum_ambient, llumGL, ifixe, ilum2sides,
@@ -3244,8 +3245,33 @@ BOOL CEntornVGIView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 		if (escalaPersp < 8.0f) escalaPersp = 8.0f;
 		InvalidateRect(NULL, false);
 	}
-	// Funció de zoom quan està activada la funció pan o les T. Geomètriques
-	else if ((zzoom || zzoomO) || (transX) || (transY) || (transZ))
+	// Zoom amb rodeta en Projecció Ortogràfica (zoom de projecció)
+	else if (projeccio == ORTO)
+	{
+		// Zoom per la projecció ortogràfica - canviant l'escala de projecció
+		escalaOrto = escalaOrto - (zDelta / 40.0);
+		// Límit mínim per evitar zoom infinit
+		if (escalaOrto < 0.5f) escalaOrto = 0.5f;
+		// Límit màxim per evitar zoom infinit negatiu
+		if (escalaOrto > 50.0f) escalaOrto = 50.0f;
+		InvalidateRect(NULL, false);
+	}
+	// Zoom amb rodeta en Projecció Axonometrica (zoom de càmera)
+	else if (projeccio == AXONOM)
+	{
+		// Zoom per la projecció axonometrica - canviant la distancia de la càmera (OPV.R)
+		// i també escalant el volum de visualització de la projecció ortogràfica
+		OPV.R = OPV.R + zDelta / 8.0;  // Sensibilitat reduïda (era /4.0)
+		escalaOrto = escalaOrto + (zDelta / 80.0);  // Sensibilitat reduïda proporcionalment (era /40.0)
+		// Límit mínim per evitar zoom infinit
+		if (OPV.R < 0.25) OPV.R = 0.25;
+		if (escalaOrto < 0.5f) escalaOrto = 0.5f;
+		// Límit màxim per evitar zoom infinit negatiu
+		if (escalaOrto > 50.0f) escalaOrto = 50.0f;
+		InvalidateRect(NULL, false);
+	}
+	// Funció de zoom quan està activada la funció pan o les T. Geomètriques (per a perspectiva)
+	else if ((zzoom) || (transX) || (transY) || (transZ))
 	{
 		if (camera == CAM_ESFERICA) {	// Càmera Esfèrica
 			OPV.R = OPV.R + zDelta / 4.0;
@@ -3662,12 +3688,15 @@ void CEntornVGIView::OnUpdateVistaZoom(CCmdUI* pCmdUI)
 void CEntornVGIView::OnVistaZoomOrto()
 {
 	// TODO: Agregue aquí su código de controlador de comandos
-	if ((projeccio == ORTO) || (projeccio == AXONOM) && (camera == CAM_ESFERICA || camera == CAM_GEODE)) zzoomO = !zzoomO;
-	// Desactivació de Transformacions Geomètriques via mouse 
-	//	si Zoom activat
-	if (zzoomO) {
-		zzoom = false;
-		transX = false;	transY = false;	transZ = false;
+	// Activar zoom en projeccions ortogràfiques i axonometrica
+	if ((projeccio == ORTO || projeccio == AXONOM) && (camera == CAM_ESFERICA || camera == CAM_GEODE)) 
+	{
+		zzoomO = !zzoomO;
+		// Desactivació de Transformacions Geomètriques via mouse si Zoom activat
+		if (zzoomO) {
+			zzoom = false;
+			transX = false;	transY = false;	transZ = false;
+		}
 	}
 
 	// Crida a OnPaint() per redibuixar l'escena

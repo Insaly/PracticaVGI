@@ -320,29 +320,32 @@ void Iluminacio(GLint sh_programID, char ilumin, bool ifix, bool ilu2sides, bool
 
 // Projeccio_Orto: Definició Viewport i glOrtho 
 // ---- Entorn VGI: ATENCIÓ!!. CAL DEFINIR PARÀMETRES DE LA FUNCIÓ
-glm::mat4 Projeccio_Orto(GLuint sh_programID, int x, int y, float w, float h, float escala)
+glm::mat4 Projeccio_Orto(GLuint sh_programID, int x, int y, float w, float h, float escala, float escalaZoom, float farPlane)
 {
 	glm::mat4 MatriuProjeccio(1.0);
 
 	GLdouble aspecte = w / h;
 
 	GLdouble left, right, bottom, top;
-	GLdouble vnear = -100;
-	GLdouble vfar = 100;
+	GLdouble vnear = -farPlane;
+	GLdouble vfar = farPlane;
+
+	// Aplicar el factor de zoom a l'escala
+	float escalaTotal = escala * escalaZoom;
 
 	if (aspecte >= 1)
 	{
-		left = -aspecte * escala;
-		right = aspecte * escala;
-		bottom = -escala;
-		top = escala;
+		left = -aspecte * escalaTotal;
+		right = aspecte * escalaTotal;
+		bottom = -escalaTotal;
+		top = escalaTotal;
 	}
 	else
 	{
-		left = -escala;
-		right = escala;
-		bottom = -escala / aspecte;
-		top = escala / aspecte;
+		left = -escalaTotal;
+		right = escalaTotal;
+		bottom = -escalaTotal / aspecte;
+		top = escalaTotal / aspecte;
 	}
 
 	MatriuProjeccio = glm::ortho(float(left), float(right), float(bottom), float(top), float(vnear), float(vfar));
