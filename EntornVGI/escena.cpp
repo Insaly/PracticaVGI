@@ -80,7 +80,7 @@ void dibuixa_EscenaGL(GLuint sh_programID, bool eix, GLuint axis_Id, CMask3D rei
 	bool textur, GLuint texturID[NUM_MAX_TEXTURES], bool textur_map, bool flagInvertY,
 	int nptsU, CPunt3D PC_u[MAX_PATCH_CORBA], GLfloat pasCS, bool sw_PC, bool dib_TFrenet,
 	COBJModel* objecteOBJ,
-	glm::mat4 MatriuVista, glm::mat4 MatriuTG, float temps = 0)
+	glm::mat4 MatriuVista, glm::mat4 MatriuTG, float temps = 0, float angle_far = 0)
 {
 	float altfar = 0;
 	GLint npunts = 0, nvertexs = 0;
@@ -161,7 +161,7 @@ void dibuixa_EscenaGL(GLuint sh_programID, bool eix, GLuint axis_Id, CMask3D rei
 		draw_TriVAO_Object(MAR_FRACTAL_VAO);
 		// Desactivar transparència
 		glDisable(GL_BLEND);
-		faro(sh_programID, MatriuVista, MatriuTG, sw_mat);
+		faro(sh_programID, MatriuVista, MatriuTG, angle_far, sw_mat);
 
 		CPunt3D p;
 
@@ -654,48 +654,63 @@ void camio(GLuint sh_programID, glm::mat4 MatriuVista, glm::mat4 MatriuTG, bool 
 }
 
 // FARO PER AL PAISATGE
-void faro(GLuint shaderID, glm::mat4 MatriuVista, glm::mat4 MatriuTG, bool sw_mat[5])
+void faro(GLuint shaderID, glm::mat4 MatriuVista, glm::mat4 MatriuTG, float angle_far, bool sw_mat[5])
 {
 	glm::mat4 NormalMatrix(1.0), ModelMatrix(1.0);
 	CColor col_object;
 
-	col_object.r = 1.0;		col_object.g = 0.5;		col_object.b = 0.0;		col_object.a = 1.0;	// Color groc
+	// ================= BASE DEL FARO =================
+	col_object = { 1.0, 0.5, 0.0, 1.0 };
 	SeleccionaColorMaterial(shaderID, col_object, sw_mat);
 
-	// Pas ModelView Matrix a shader
-	glUniformMatrix4fv(glGetUniformLocation(shaderID, "modelMatrix"), 1, GL_FALSE, &ModelMatrix[0][0]);
-	// Pas NormalMatrix a shader
-	NormalMatrix = transpose(inverse(MatriuVista * ModelMatrix));
-	glUniformMatrix4fv(glGetUniformLocation(shaderID, "normalMatrix"), 1, GL_FALSE, &NormalMatrix[0][0]);
+	glUniformMatrix4fv(
+		glGetUniformLocation(shaderID, "modelMatrix"),
+		1, GL_FALSE, &MatriuTG[0][0]
+	);
+
+	NormalMatrix = transpose(inverse(MatriuVista * MatriuTG));
+	glUniformMatrix4fv(
+		glGetUniformLocation(shaderID, "normalMatrix"),
+		1, GL_FALSE, &NormalMatrix[0][0]
+	);
+
 	cilindre(7.5, 4.5, 20, 50, 1);
 
-	ModelMatrix = glm::translate(MatriuTG, vec3(0.0f, 0.0f, 28.0f));
-	// Pas ModelView Matrix a shader
-	glUniformMatrix4fv(glGetUniformLocation(shaderID, "modelMatrix"), 1, GL_FALSE, &ModelMatrix[0][0]);
-	// Pas NormalMatrix a shader
+	// ================= TAPA SUPERIOR =================
+	ModelMatrix = glm::translate(MatriuTG, vec3(0, 0, 28));
+	glUniformMatrix4fv(
+		glGetUniformLocation(shaderID, "modelMatrix"),
+		1, GL_FALSE, &ModelMatrix[0][0]
+	);
+
 	NormalMatrix = transpose(inverse(MatriuVista * ModelMatrix));
-	glUniformMatrix4fv(glGetUniformLocation(shaderID, "normalMatrix"), 1, GL_FALSE, &NormalMatrix[0][0]);
+	glUniformMatrix4fv(
+		glGetUniformLocation(shaderID, "normalMatrix"),
+		1, GL_FALSE, &NormalMatrix[0][0]
+	);
+
 	cilindre(6, 6, 1, 50, 1);
 
-	glUniform4f(glGetUniformLocation(shaderID, "LightSource[7].position"), 0.0f, 0.0f, 24.0f, 1.0f);
-	glUniform4f(glGetUniformLocation(shaderID, "LightSource[7].diffuse"), 1.0f, 1.0f, 1.0f, 1.0f);
-	glUniform4f(glGetUniformLocation(shaderID, "LightSource[7].specular"), 1.0f, 1.0f, 1.0f, 1.0f);
-	glUniform4f(glGetUniformLocation(shaderID, "LightSource[7].spotDirection"), 0.0f, -1.0f, 0.5f, 1.0f);
-	glUniform1f(glGetUniformLocation(shaderID, "LightSource[7].spotCosCutoff"), 0.707106f);
-	glUniform1f(glGetUniformLocation(shaderID, "LightSource[7].spotExponent"), 5.0f);
 
+	// ================= VIDRIO TRANSPARENTE =================
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	col_object.r = 1.0;		col_object.g = 1.0;		col_object.b = 0.0;		col_object.a = 0.3;	// Color groc
+	col_object = { 1.0, 1.0, 0.0, 0.3 };
 	SeleccionaColorMaterial(shaderID, col_object, sw_mat);
 
-	ModelMatrix = glm::translate(MatriuTG, vec3(0.0f, 0.0f, 20.0f));
-	// Pas ModelView Matrix a shader
-	glUniformMatrix4fv(glGetUniformLocation(shaderID, "modelMatrix"), 1, GL_FALSE, &ModelMatrix[0][0]);
-	// Pas NormalMatrix a shader
+	ModelMatrix = glm::translate(MatriuTG, vec3(0, 0, 20));
+	glUniformMatrix4fv(
+		glGetUniformLocation(shaderID, "modelMatrix"),
+		1, GL_FALSE, &ModelMatrix[0][0]
+	);
+
 	NormalMatrix = transpose(inverse(MatriuVista * ModelMatrix));
-	glUniformMatrix4fv(glGetUniformLocation(shaderID, "normalMatrix"), 1, GL_FALSE, &NormalMatrix[0][0]);
+	glUniformMatrix4fv(
+		glGetUniformLocation(shaderID, "normalMatrix"),
+		1, GL_FALSE, &NormalMatrix[0][0]
+	);
+
 	cilindre(4.5, 4.5, 8, 50, 1);
 
 	glDisable(GL_BLEND);

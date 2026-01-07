@@ -466,7 +466,7 @@ CEntornVGIView::CEntornVGIView()
 	llumGL[7].spotcoscutoff = 0.5;		llumGL[7].spotexponent = 5.0;
 
 	// Activació font de llum: APAGADA
-	llumGL[7].encesa = false;
+	llumGL[7].encesa = true;
 	// ---------------- FI DEFINICIÓ LLUMS
 
 	// Entorn VGI: Variables de control del menú Shaders		
@@ -511,6 +511,9 @@ CEntornVGIView::CEntornVGIView()
 
 	// Entorn VGI: Variables del Timer
 	t = 0;			anima = false;
+
+	angle_far = 0.0f;
+	anima_far = true;
 
 	// Entorn VGI: Variables de l'objecte FRACTAL
 	t_fractal = CAP;	soroll = 'C';
@@ -1167,7 +1170,7 @@ void CEntornVGIView::dibuixa_Escena()
 		textura, texturesID, textura_map, tFlag_invert_Y,
 		npts_T, PC_t, pas_CS, sw_Punts_Control, dibuixa_TriedreFrenet,
 		ObOBJ,				// Classe de l'objecte OBJ que conté els VAO's
-		ViewMatrix, GTMatrix, temps);
+		ViewMatrix, GTMatrix, temps, angle_far);
 }
 
 // Barra_Estat: Actualitza la barra d'estat (Status Bar) de l'aplicació amb els
@@ -3297,6 +3300,44 @@ BOOL CEntornVGIView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 /* ------------------------------------------------------------------------- */
 void CEntornVGIView::OnTimer(UINT_PTR nIDEvent)
 {
+	if (objecte == PAISATGE && anima_far)
+	{
+		angle_far += 1.0f;
+		if (angle_far >= 360.0f) angle_far -= 360.0f;
+
+		float ang = glm::radians(angle_far);
+
+		glm::vec3 dir0(0.0f, -1.0f, -0.5f);
+		glm::mat4 R = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 0, 1));
+		glm::vec3 dir = glm::normalize(glm::vec3(R * glm::vec4(dir0, 0.0f)));
+
+		// Posición del foco (centro del vidrio)
+		llumGL[7].posicio.x = 0.0f;
+		llumGL[7].posicio.y = 0.0f;
+		llumGL[7].posicio.z = 24.0f;
+		llumGL[7].posicio.w = 1.0f;
+
+		// Dirección rotatoria
+		llumGL[7].spotdirection.x = dir.x;
+		llumGL[7].spotdirection.y = dir.y;
+		llumGL[7].spotdirection.z = dir.z;
+
+		llumGL[7].restringida = true;
+		llumGL[7].spotcoscutoff =0.9659f;
+		llumGL[7].spotexponent = 30.0f;
+		llumGL[7].encesa = true;
+
+		InvalidateRect(NULL, FALSE);
+	}
+	
+	if (anima && anima_far && objecte == PAISATGE)
+	{
+		angle_far += 1.0f;          // grados por frame
+		if (angle_far >= 360.0f)
+			angle_far -= 360.0f;
+
+		InvalidateRect(NULL, FALSE);
+	}
 	// TODO: Agregue aquí su código de controlador de mensajes o llame al valor predeterminado
 	if (anima) {
 		
@@ -6235,6 +6276,10 @@ void CEntornVGIView::OnObjectePaisatge()
 	color_Mar.r = 0.5;	color_Mar.g = 0.4; color_Mar.b = 0.9; color_Mar.a = 1.0;
 	objecte = PAISATGE;
 
+	anima = true;        // animación general
+	anima_far = true;    // animación del faro
+	angle_far = 0.0f;
+
 	//	---- Entorn VGI: ATENCIÓ!!. Canviar l'escala per a centrar la vista (Ortogràfica)
 
 	escala = 20;
@@ -6279,7 +6324,7 @@ void CEntornVGIView::OnObjectePaisatge()
 	// Entorn VGI: Desactivació del contexte OpenGL. Permet la coexistencia d'altres contextes de generació
 	wglMakeCurrent(m_pDC->GetSafeHdc(), NULL);
 
-	SetTimer(WM_TIMER, 4, NULL);
+	SetTimer(1, 16, NULL);
 
 	// Crida a OnPaint() per redibuixar l'escena
 	InvalidateRect(NULL, false);

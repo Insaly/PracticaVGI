@@ -175,6 +175,10 @@ public:
 	bool anima;		// Booleana que controla si l'animació és activa (TRUE) o no (FALSE)
 					//    dins la funció de control del rellotge OnTimer.
 
+	// ===== Faro: luz giratoria =====
+	float angle_far;      // ángulo de rotación del foco (en grados o radianes)
+	bool anima_far;       // activar/desactivar animación del faro
+
 // Entorn VGI: Variables de l'objecte FRACTAL
 	char t_fractal;		// Tipus de fractal.
 	char soroll;		// Menú Fractals: Tipus de soroll

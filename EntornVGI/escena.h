@@ -22,7 +22,7 @@ void dibuixa_EscenaGL(GLuint sh_programID, bool eix, GLuint axis_Id, CMask3D rei
 	bool textur, GLuint texturID[NUM_MAX_TEXTURES], bool textur_map, bool flagInvertY,
 	int nptsU, CPunt3D PC_u[MAX_PATCH_CORBA], GLfloat pasCS, bool sw_PC, bool dib_TFrenet,
 	COBJModel* objecteOBJ,
-	glm::mat4 MatriuVista, glm::mat4 MatriuTG, float temps);
+	glm::mat4 MatriuVista, glm::mat4 MatriuTG, float temps, float angle_far);
 
 // Entorn VGI: dibuixa -> Funció que dibuixa objectes simples de la llibreria GLUT segons obj
 void dibuixa(GLuint sh_programID, char obj, glm::mat4 MatriuVista, glm::mat4 MatriuTG);
@@ -42,5 +42,5 @@ void Cabina(GLint shaderId, glm::mat4 MatriuVista, glm::mat4 MatriuTG, bool sw_m
 
 void camio(GLuint sh_programID, glm::mat4 MatriuVista, glm::mat4 MatriuTG, bool sw_mat[5]);
 void octopus(GLuint shaderId, glm::mat4 MatriuVista, glm::mat4 MatriuTG, bool sw_mat[5]);
-void faro(GLuint shaderId, glm::mat4 MatriuVista, glm::mat4 MatriuTG, bool sw_mat[5]);
+void faro(GLuint shaderId, glm::mat4 MatriuVista, glm::mat4 MatriuTG, float angle_far, bool sw_mat[5]);
 #endif
