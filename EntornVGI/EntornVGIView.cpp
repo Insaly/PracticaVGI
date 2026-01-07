@@ -41,6 +41,8 @@
 
 float escala = 5.0;
 float escalaPersp = 100.0;
+float temps = 0;
+
 
 /////////////////////////////////////////////////////////////////////////////
 // CEntornVGIView
@@ -222,15 +224,15 @@ BEGIN_MESSAGE_MAP(CEntornVGIView, CView)
 	ON_UPDATE_COMMAND_UI(ID_OBJECTE_CAMIO, &CEntornVGIView::OnUpdateObjecteCamio)
 	ON_COMMAND(ID_OBJECTE_OCTOPUS, &CEntornVGIView::OnObjecteOctopus)
 	ON_UPDATE_COMMAND_UI(ID_OBJECTE_OCTOPUS, &CEntornVGIView::OnUpdateObjecteOctopus)
-		ON_COMMAND(ID_TEXTURA_BRICS, &CEntornVGIView::OnTexturaBrics)
-		ON_UPDATE_COMMAND_UI(ID_TEXTURA_BRICS, &CEntornVGIView::OnUpdateTexturaBrics)
-		ON_COMMAND(ID_TEXTURA_MAPAMUNDI, &CEntornVGIView::OnTexturaMapamundi)
-		ON_UPDATE_COMMAND_UI(ID_TEXTURA_MAPAMUNDI, &CEntornVGIView::OnUpdateTexturaMapamundi)
-		ON_COMMAND(ID_TEXTURA_SAC, &CEntornVGIView::OnTexturaSac)
-		ON_UPDATE_COMMAND_UI(ID_TEXTURA_SAC, &CEntornVGIView::OnUpdateTexturaSac)
-		ON_COMMAND(ID_OBJECTE_PAISATGE, &CEntornVGIView::OnObjectePaisatge)
-		ON_UPDATE_COMMAND_UI(ID_OBJECTE_PAISATGE, &CEntornVGIView::OnUpdateObjectePaisatge)
-		END_MESSAGE_MAP()
+	ON_COMMAND(ID_TEXTURA_BRICS, &CEntornVGIView::OnTexturaBrics)
+	ON_UPDATE_COMMAND_UI(ID_TEXTURA_BRICS, &CEntornVGIView::OnUpdateTexturaBrics)
+	ON_COMMAND(ID_TEXTURA_MAPAMUNDI, &CEntornVGIView::OnTexturaMapamundi)
+	ON_UPDATE_COMMAND_UI(ID_TEXTURA_MAPAMUNDI, &CEntornVGIView::OnUpdateTexturaMapamundi)
+	ON_COMMAND(ID_TEXTURA_SAC, &CEntornVGIView::OnTexturaSac)
+	ON_UPDATE_COMMAND_UI(ID_TEXTURA_SAC, &CEntornVGIView::OnUpdateTexturaSac)
+	ON_COMMAND(ID_OBJECTE_PAISATGE, &CEntornVGIView::OnObjectePaisatge)
+	ON_UPDATE_COMMAND_UI(ID_OBJECTE_PAISATGE, &CEntornVGIView::OnUpdateObjectePaisatge)
+END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
 // Construcción o destrucción de CEntornVGIView
@@ -1055,8 +1057,8 @@ void CEntornVGIView::OnPaint()
 		// Dibuix de l'Objecte o l'Escena
 		configura_Escena();     // Aplicar Transformacions Geom?triques segons persiana Transformacio i configurar objectes
 		dibuixa_Escena();		// Dibuix geometria de l'escena amb comandes GL
-		
-		
+
+
 		// Intercanvia l'escena al front de la pantalla
 		SwapBuffers(m_pDC->GetSafeHdc());
 		break;
@@ -1165,7 +1167,7 @@ void CEntornVGIView::dibuixa_Escena()
 		textura, texturesID, textura_map, tFlag_invert_Y,
 		npts_T, PC_t, pas_CS, sw_Punts_Control, dibuixa_TriedreFrenet,
 		ObOBJ,				// Classe de l'objecte OBJ que conté els VAO's
-		ViewMatrix, GTMatrix);
+		ViewMatrix, GTMatrix, temps);
 }
 
 // Barra_Estat: Actualitza la barra d'estat (Status Bar) de l'aplicació amb els
@@ -3297,9 +3299,11 @@ void CEntornVGIView::OnTimer(UINT_PTR nIDEvent)
 {
 	// TODO: Agregue aquí su código de controlador de mensajes o llame al valor predeterminado
 	if (anima) {
-		// Codi de tractament de l'animació quan transcorren els ms. del crono.
+		
+		temps += 0.8;
+		if (temps >= 360)
+			temps = temps - 360;
 
-		// Crida a OnPaint() per redibuixar l'escena
 		InvalidateRect(NULL, false);
 	}
 	else if (satelit) {	// OPCIÓ SATÈLIT: Increment OPV segons moviments mouse.
@@ -4059,7 +4063,7 @@ void CEntornVGIView::OnObjecteCub()
 	//	---- Entorn VGI: ATENCIÓ!!. Canviar l'escala per a centrar la vista (Ortogràfica)
 
 	escala = 4.1;
-	
+
 	//  ---- Entorn VGI: ATENCIÓ!!. Modificar R per centrar la Vista a la mida de l'objecte (Perspectiva)
 
 	escalaPersp = 8.6;
@@ -6164,7 +6168,7 @@ void CEntornVGIView::OnObjecteOctopus()
 	SetColor4d(col_obj.r, col_obj.g, col_obj.b, col_obj.a);
 
 	Set_VAOList(GLU_SPHERE, loadglutSolidSphere_EBO(1.0, 20, 20));
-	Set_VAOList(GLU_CYLINDER, loadglutSolidCylinder_EBO( 1.0, 1.0, 20, 20));
+	Set_VAOList(GLU_CYLINDER, loadglutSolidCylinder_EBO(1.0, 1.0, 20, 20));
 
 	// Entorn VGI: Desactivació del contexte OpenGL. Permet la coexistencia d'altres contextes de generació
 	wglMakeCurrent(m_pDC->GetSafeHdc(), NULL);
@@ -6198,7 +6202,7 @@ void CEntornVGIView::OnTexturaBrics()
 
 void CEntornVGIView::OnUpdateTexturaBrics(CCmdUI* pCmdUI)
 {
-	if (textura ==  TEXTURA_BRICKS) pCmdUI->SetCheck(1);
+	if (textura == TEXTURA_BRICKS) pCmdUI->SetCheck(1);
 	else pCmdUI->SetCheck(0);
 }
 
@@ -6225,6 +6229,8 @@ void CEntornVGIView::OnUpdateTexturaSac(CCmdUI* pCmdUI)
 void CEntornVGIView::OnObjectePaisatge()
 {
 	CColor color_Mar;
+	anima = true;
+
 
 	color_Mar.r = 0.5;	color_Mar.g = 0.4; color_Mar.b = 0.9; color_Mar.a = 1.0;
 	objecte = PAISATGE;
@@ -6258,8 +6264,22 @@ void CEntornVGIView::OnObjectePaisatge()
 	//if (Get_VAOId(MAR_FRACTAL_VAO) != 0) deleteVAOList(MAR_FRACTAL_VAO);
 	Set_VAOList(MAR_FRACTAL_VAO, loadSea_VAO(color_Mar));		// Carrega Mar a la posició MAR_FRACTAL_VAO.
 
+	Set_VAOList(GLUT_CYLINDER, loadgluCylinder_EBO(5.0f, 5.0f, 0.5f, 6, 1));
+	Set_VAOList(GLU_DISK, loadgluDisk_EBO(0.0f, 5.0f, 6, 1));
+	Set_VAOList(GLU_SPHERE, loadgluSphere_EBO(10.0f, 80, 80));
+	Set_VAOList(GLUT_USER1, loadgluCylinder_EBO(5.0f, 5.0f, 2.0f, 6, 1));
+	Set_VAOList(GLUT_CUBE, loadglutSolidCube_EBO(1.0));
+	Set_VAOList(GLUT_TORUS, loadglutSolidTorus_EBO(1.0, 5.0, 20, 20));
+	Set_VAOList(GLUT_USER2, loadgluCylinder_EBO(1.0f, 0.5f, 5.0f, 60, 1));
+	Set_VAOList(GLUT_USER3, loadgluCylinder_EBO(0.35f, 0.35f, 5.0f, 80, 1));
+	Set_VAOList(GLUT_USER4, loadgluCylinder_EBO(4.0f, 2.0f, 10.25f, 40, 1));
+	Set_VAOList(GLUT_USER5, loadgluCylinder_EBO(1.5f, 4.5f, 2.0f, 8, 1));
+	Set_VAOList(GLUT_USER6, loadgluDisk_EBO(0.0f, 1.5f, 8, 1));
+
 	// Entorn VGI: Desactivació del contexte OpenGL. Permet la coexistencia d'altres contextes de generació
 	wglMakeCurrent(m_pDC->GetSafeHdc(), NULL);
+
+	SetTimer(WM_TIMER, 4, NULL);
 
 	// Crida a OnPaint() per redibuixar l'escena
 	InvalidateRect(NULL, false);

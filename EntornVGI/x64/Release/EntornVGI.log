@@ -1,5 +1,5 @@
 ﻿  EntornVGIView.cpp
-C:\Users\lluc\Desktop\Visualització Gràfica Interactiva\PracticaVGI\EntornVGI\EntornVGIView.cpp(6201,18): warning C4806: '==': operación no segura: ningún valor del tipo 'bool' promovido al tipo 'char' puede igualar la constante proporcionada
-  (compilando archivo de origen "/EntornVGIView.cpp")
+C:\Users\janga\OneDrive\Escritorio\3r Informatica\VGI\PracticaVGI\EntornVGI\EntornVGIView.cpp(6205,17): warning C4806: '==': unsafe operation: no value of type 'bool' promoted to type 'char' can equal the given constant
+  (compiling source file '/EntornVGIView.cpp')
   
-  EntornVGI.vcxproj -> C:\Users\lluc\Desktop\Visualització Gràfica Interactiva\PracticaVGI\x64\Release\EntornVGI.exe
+  EntornVGI.vcxproj -> C:\Users\janga\OneDrive\Escritorio\3r Informatica\VGI\PracticaVGI\x64\Release\EntornVGI.exe
