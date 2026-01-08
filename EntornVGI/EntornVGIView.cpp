@@ -44,6 +44,22 @@ float escalaPersp = 100.0;
 float escalaOrto = 5.0;	// Escala de zoom per a les projeccions Ortogràfica i Axonometrica
 float temps = 0;
 
+// Càlcul dinàmic del pla far per projeccions ortogràfiques/axonomètriques segons zoom.
+// Quan fem zoom in (escalaOrto decreix), incrementem el far per evitar retallades.
+static float ComputeOrthoFar(float escalaZoom)
+{
+	// Valors base empírics per cobrir eixos (fins a ~300) i escenes grans
+	const float baseZoom = 5.0f;     // valor nominal d'escala inicial
+	const float baseFar = 1000.0f;   // far nominal quan escalaZoom == baseZoom
+	// Evitar divisions per zero i fer créixer el far inversament al zoom
+	float zoomFactor = baseZoom / (escalaZoom > 0.1f ? escalaZoom : 0.1f);
+	float farPlane = baseFar * zoomFactor;
+	// Acotar per evitar valors massa petits o massa grans
+	if (farPlane < 500.0f) farPlane = 500.0f;
+	if (farPlane > 50000.0f) farPlane = 50000.0f;
+	return farPlane;
+}
+
 
 /////////////////////////////////////////////////////////////////////////////
 // CEntornVGIView
@@ -455,8 +471,8 @@ CEntornVGIView::CEntornVGIView()
 	llumGL[7].posicio.x = 50.0;			llumGL[7].posicio.y = 50.0;			llumGL[7].posicio.z = -50.0;	llumGL[7].posicio.w = 1.0;
 
 	// Intensitats difusa i especular de la font de llum (r,g,b) = (0,1,1):
-	llumGL[7].difusa.r = 0.0f;			llumGL[7].difusa.g = 1.0f;			llumGL[7].difusa.b = 1.0f;		llumGL[7].difusa.a = 1.0f;
-	llumGL[7].especular.r = 0.0f;		llumGL[7].especular.g = 1.0f;		llumGL[7].especular.b = 1.0f;	llumGL[7].especular.a = 1;
+	llumGL[7].difusa.r = 1.0f;			llumGL[7].difusa.g = 1.0f;			llumGL[7].difusa.b = 1.0f;		llumGL[7].difusa.a = 1.0f;
+	llumGL[7].especular.r = 1.0f;		llumGL[7].especular.g = 1.0f;		llumGL[7].especular.b = 1.0f;	llumGL[7].especular.a = 1;
 
 	// Coeficients factor atenuació f_att=1/(ad2+bd+c). Llum sense atenuació per distància (a,b,c)=(0,0,1):
 	llumGL[7].atenuacio.a = 0.0;		llumGL[7].atenuacio.b = 0.0;		llumGL[7].atenuacio.c = 1.0;
@@ -987,7 +1003,12 @@ void CEntornVGIView::OnPaint()
 		glViewport(0, 0, w, h);
 
 		// Aquí farem les crides per a definir Viewport, Projecció i Càmara: INICI -------------------------
-		ProjectionMatrix = Projeccio_Orto(shader_programID, 0, 0, w, h, escala, escalaOrto, OPV.R * 2.0f);
+		{
+			float farDyn = ComputeOrthoFar(escalaOrto);
+			float farFromR = static_cast<float>(OPV.R * 2.0f);
+			float farUse = (farDyn > farFromR) ? farDyn : farFromR;
+			ProjectionMatrix = Projeccio_Orto(shader_programID, 0, 0, w, h, escala, escalaOrto, farUse);
+		}
 		ViewMatrix = Vista_Esferica(shader_programID, OPV, Vis_Polar, pan, tr_cpv, tr_cpvF, c_fons, col_obj, objecte, mida, pas,
 			front_faces, oculta, test_vis,
 			ilumina, llum_ambient, llumGL, ifixe, ilum2sides,
@@ -1015,7 +1036,7 @@ void CEntornVGIView::OnPaint()
 
 				// Definició de Viewport, Projecció i Càmara
 		glScissor(0, 0, w / 2, h / 2);
-		ProjectionMatrix = Projeccio_Orto(shader_programID, 0, 0, w / 2, h / 2, escala, escalaOrto);
+		ProjectionMatrix = Projeccio_Orto(shader_programID, 0, 0, w / 2, h / 2, escala, escalaOrto, ComputeOrthoFar(escalaOrto));
 		ViewMatrix = Vista_Ortografica(shader_programID, 1, OPV.R, c_fons, col_obj, objecte, mida, pas,
 			front_faces, oculta, test_vis,
 			ilumina, llum_ambient, llumGL, ifixe, ilum2sides,
@@ -1027,7 +1048,7 @@ void CEntornVGIView::OnPaint()
 		// ISOMÈTRICA (Inferior Dreta)
 				// Definició de Viewport, Projecció i Càmara
 		glScissor(w / 2, 0, w / 2, h / 2);
-		ProjectionMatrix = Projeccio_Orto(shader_programID, w / 2, 0, w / 2, h / 2, escala, escalaOrto);
+		ProjectionMatrix = Projeccio_Orto(shader_programID, w / 2, 0, w / 2, h / 2, escala, escalaOrto, ComputeOrthoFar(escalaOrto));
 		ViewMatrix = Vista_Ortografica(shader_programID, 3, OPV.R, c_fons, col_obj, objecte, mida, pas,
 			front_faces, oculta, test_vis,
 			ilumina, llum_ambient, llumGL, ifixe, ilum2sides,
@@ -1040,7 +1061,7 @@ void CEntornVGIView::OnPaint()
 		// ALÇAT (Superior Esquerra)
 				// Definició de Viewport, Projecció i Càmara
 		glScissor(0, h / 2, w / 2, h / 2);
-		ProjectionMatrix = Projeccio_Orto(shader_programID, 0, h / 2, w / 2, h / 2, escala, escalaOrto);
+		ProjectionMatrix = Projeccio_Orto(shader_programID, 0, h / 2, w / 2, h / 2, escala, escalaOrto, ComputeOrthoFar(escalaOrto));
 		ViewMatrix = Vista_Ortografica(shader_programID, 0, OPV.R, c_fons, col_obj, objecte, mida, pas,
 			front_faces, oculta, test_vis,
 			ilumina, llum_ambient, llumGL, ifixe, ilum2sides,
@@ -1053,7 +1074,7 @@ void CEntornVGIView::OnPaint()
 
 				// Definició de Viewport, Projecció i Càmara
 		glScissor(w / 2, h / 2, w / 2, h / 2);
-		ProjectionMatrix = Projeccio_Orto(shader_programID, w / 2, h / 2, w / 2, h / 2, escala, escalaOrto);
+		ProjectionMatrix = Projeccio_Orto(shader_programID, w / 2, h / 2, w / 2, h / 2, escala, escalaOrto, ComputeOrthoFar(escalaOrto));
 		ViewMatrix = Vista_Ortografica(shader_programID, 2, OPV.R, c_fons, col_obj, objecte, mida, pas,
 			front_faces, oculta, test_vis,
 			ilumina, llum_ambient, llumGL, ifixe, ilum2sides,
@@ -3349,8 +3370,8 @@ void CEntornVGIView::OnTimer(UINT_PTR nIDEvent)
 		llumGL[7].spotdirection.z = dir.z;
 
 		llumGL[7].restringida = true;
-		llumGL[7].spotcoscutoff =0.9659f;
-		llumGL[7].spotexponent = 30.0f;
+		llumGL[7].spotcoscutoff =0.0716f;
+		llumGL[7].spotexponent = 5.0f;
 		llumGL[7].encesa = true;
 
 		InvalidateRect(NULL, FALSE);
